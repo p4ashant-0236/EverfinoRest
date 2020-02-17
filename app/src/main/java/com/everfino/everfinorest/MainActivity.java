@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_menu:
                         //Menu
-
                         fragment = new MenuFragment();
                         loadFragment(fragment);
                         break;

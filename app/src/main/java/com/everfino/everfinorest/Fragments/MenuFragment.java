@@ -4,19 +4,38 @@ package com.everfino.everfinorest.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.everfino.everfinorest.Adapter.MenuAdapter;
+import com.everfino.everfinorest.ApiConnection.Api;
+import com.everfino.everfinorest.ApiConnection.ApiClient;
+import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.R;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MenuFragment extends Fragment {
 
-
+    RecyclerView rcv_menu;
+    List<HashMap<String,String>> ls_menu=new ArrayList<>();
+    private static Api apiService;
     public MenuFragment() {
         // Required empty public constructor
     }
@@ -25,8 +44,46 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu, container, false);
+
+        View view =  inflater.inflate(R.layout.fragment_menu, container, false);
+        rcv_menu=view.findViewById(R.id.rcv_menu);
+        apiService= ApiClient.getClient().create(Api.class);
+
+        fetch_menu();
+        return view;
     }
+
+    private void fetch_menu(){
+
+        ls_menu.clear();
+        rcv_menu.setLayoutManager(new GridLayoutManager(getContext(),1));
+
+        Call<List<MenuList>> call=apiService.get_Rest_Menu();
+        call.enqueue(new Callback<List<MenuList>>() {
+            @Override
+            public void onResponse(Call<List<MenuList>> call, Response<List<MenuList>> response) {
+                Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+                for(MenuList item: response.body()) {
+
+                    HashMap<String,String> map=new HashMap<>();
+                    map.put("itemname",item.getItemname());
+                    Log.e("####",item.getItemname());
+                    ls_menu.add(map);
+                }
+
+                MenuAdapter adapter=new MenuAdapter(getContext(),ls_menu);
+                rcv_menu.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<MenuList>> call, Throwable t) {
+                Toast.makeText(getContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+    }
+
 
 }
