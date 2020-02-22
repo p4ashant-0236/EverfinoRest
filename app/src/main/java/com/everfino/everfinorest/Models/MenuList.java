@@ -6,6 +6,14 @@ public class MenuList {
     public String itemname;
     public int itemprice;
 
+    public MenuList(int itemid, String itemname, int itemprice, String itemdesc, String itemtype) {
+        this.itemid = itemid;
+        this.itemname = itemname;
+        this.itemprice = itemprice;
+        this.itemdesc = itemdesc;
+        this.itemtype = itemtype;
+    }
+
     public int getItemid() {
         return itemid;
     }
