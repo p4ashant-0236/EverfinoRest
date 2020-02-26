@@ -11,15 +11,18 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="9"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/tab_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:menu="@menu/tab_menu">
 
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
     </FrameLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_weight="1"
+        android:id="@+id/tab_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/tab_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 </LinearLayout>
