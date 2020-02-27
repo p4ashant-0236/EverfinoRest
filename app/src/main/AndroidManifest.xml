@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateManagerAccount"></activity>
+        <activity android:name=".ReceptionistActivity"></activity>
+        <activity android:name=".ChefActivity" />
+        <activity android:name=".CreateManagerAccount" />
         <activity android:name=".RegisterRestDetailActivity" />
         <activity android:name=".RegisterRestActivity" />
         <activity android:name=".LoginActivity" />

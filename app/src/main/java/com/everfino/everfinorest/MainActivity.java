@@ -34,9 +34,25 @@ public class MainActivity extends AppCompatActivity {
 
         appSharedPreferences=new AppSharedPreferences(this);
         map=appSharedPreferences.getPref();
+
         if(Integer.parseInt(map.get("userid"))!=0 && map.get("username")!="" && map.get("role")!="")
-        {
-            //
+        {  Log.e("$$$$$$$$",map.get("userid")+map.get("username")+ map.get("role"));
+            if(map.get("role")=="chef")
+            {
+                    Intent i =new Intent(MainActivity.this,ChefActivity.class);
+                    startActivity(i);
+                    finish();
+            }
+            else if(map.get("role")=="Rec")
+            {
+                Intent i =new Intent(MainActivity.this,ReceptionistActivity.class);
+                startActivity(i);
+                finish();
+            }
+            else if(map.get("role")=="Manager") {
+                Toast.makeText(this, "Welcome "+map.get("username"), Toast.LENGTH_SHORT).show();
+            }
+
         }
         else
         {
