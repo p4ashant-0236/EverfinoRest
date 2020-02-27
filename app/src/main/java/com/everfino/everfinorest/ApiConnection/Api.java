@@ -1,6 +1,7 @@
 package com.everfino.everfinorest.ApiConnection;
 
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.RestUserResponse;
 import com.everfino.everfinorest.Models.TableList;
 import com.google.gson.JsonObject;
 
@@ -16,9 +17,13 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Api {
+
+    @POST("rest_staff_login/{restid}")
+    Call<RestUserResponse> rest_staff_login(@Path("restid") int restid,@Body JsonObject obj);
 
     @GET("rest_Menu/7")
     Call<List<MenuList>> get_Rest_Menu();
