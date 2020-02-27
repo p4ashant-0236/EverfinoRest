@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.ApiConnection.Api;
@@ -23,6 +24,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     EditText restid,restname,username,password;
     Button btnlogin;
+    TextView createnewrest;
     ProgressDialog progressDialog;
     private static Api apiService;
     AppSharedPreferences appSharedPreferences;
@@ -35,8 +37,24 @@ public class LoginActivity extends AppCompatActivity {
         username=findViewById(R.id.username);
         password=findViewById(R.id.password);
         btnlogin=findViewById(R.id.btn_login);
+        createnewrest=findViewById(R.id.registerrest);
+
         apiService= ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(this);
+
+
+        createnewrest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(LoginActivity.this,RegisterRestActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+
+
+
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
                 progressDialog.dismiss();
-                Log.e("$$$$$$sadffdf",response.body().getName());
+
                 if(response.body().getName()=="false") {
+                    Log.e("$$$$$$sadffdf",response.body().getName());
                     Toast.makeText(LoginActivity.this, "check username and password", Toast.LENGTH_LONG).show();
                 }
                 else

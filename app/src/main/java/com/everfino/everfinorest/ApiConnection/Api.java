@@ -1,6 +1,8 @@
 package com.everfino.everfinorest.ApiConnection;
 
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.RegisterRestResponse;
+
 import com.everfino.everfinorest.Models.RestUserResponse;
 import com.everfino.everfinorest.Models.TableList;
 import com.google.gson.JsonObject;
@@ -24,6 +26,12 @@ public interface Api {
 
     @POST("rest_staff_login/{restid}")
     Call<RestUserResponse> rest_staff_login(@Path("restid") int restid,@Body JsonObject obj);
+
+    @POST("rest/add")
+    Call<RegisterRestResponse>  register_rest(@Body JsonObject obj);
+
+    @POST("rest_user/add/{restid}")
+    Call<RestUserResponse> add_Manager(@Path("restid") int restid,@Body JsonObject obj);
 
     @GET("rest_Menu/7")
     Call<List<MenuList>> get_Rest_Menu();
