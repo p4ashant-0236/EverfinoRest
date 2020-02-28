@@ -30,36 +30,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-
-        appSharedPreferences=new AppSharedPreferences(this);
-        map=appSharedPreferences.getPref();
-
-        if(Integer.parseInt(map.get("userid"))!=0 && map.get("username")!="" && map.get("role")!="")
-        {  Log.e("$$$$$$$$",map.get("userid")+map.get("username")+ map.get("role"));
-            if(map.get("role")=="chef")
-            {
-                    Intent i =new Intent(MainActivity.this,ChefActivity.class);
-                    startActivity(i);
-                    finish();
-            }
-            else if(map.get("role")=="Rec")
-            {
-                Intent i =new Intent(MainActivity.this,ReceptionistActivity.class);
-                startActivity(i);
-                finish();
-            }
-            else if(map.get("role")=="Manager") {
-                Toast.makeText(this, "Welcome "+map.get("username"), Toast.LENGTH_SHORT).show();
-            }
+        appSharedPreferences = new AppSharedPreferences(this);
+        map = appSharedPreferences.getPref();
+        Log.e("###123", map.get("userid") + map.get("username") + map.get("role"));
+        String role=map.get("role");
+        if (Integer.parseInt(map.get("userid")) != 0 && map.get("username") != "" && role.equals("Chef")) {
+            Log.e("###123344555", map.get("userid") + map.get("username") + map.get("role"));
+            Intent i = new Intent(MainActivity.this, ChefActivity.class);
+            startActivity(i);
 
         }
-        else
-        {
-            Intent i=new Intent(MainActivity.this,LoginActivity.class);
+        else if (Integer.parseInt(map.get("userid")) != 0 && map.get("username") != "" && role.equals("Rece")) {
+            Log.e("$$$$$$$$", map.get("userid") + map.get("username") + map.get("role"));
+            Intent i = new Intent(MainActivity.this, ReceptionistActivity.class);
+            startActivity(i);
+            finish();
+            }
+        if (Integer.parseInt(map.get("userid")) == 0 && map.get("username") == "" && role.equals("")) {
+            Log.e("$$$$$$$$", map.get("userid") + map.get("username") + map.get("role"));
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
         }
+
+
+
+
+
+
+
 
         tab_menu = findViewById(R.id.tab_menu);
 
@@ -115,4 +116,11 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+
+
+
+
+
+
 }
