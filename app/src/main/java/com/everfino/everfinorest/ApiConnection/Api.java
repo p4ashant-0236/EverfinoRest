@@ -30,31 +30,47 @@ public interface Api {
     @POST("rest/add")
     Call<RegisterRestResponse>  register_rest(@Body JsonObject obj);
 
+
+
+
+
+    @GET("rest_user/{restid}")
+    Call<List<RestUserResponse>> get_Rest_User(@Path("restid") int restid);
+
     @POST("rest_user/add/{restid}")
-    Call<RestUserResponse> add_Manager(@Path("restid") int restid,@Body JsonObject obj);
+    Call<RestUserResponse> add_Rest_User(@Path("restid") int restid,@Body JsonObject obj);
 
-    @GET("rest_Menu/7")
-    Call<List<MenuList>> get_Rest_Menu();
-    @POST("rest_Menu/add/7")
-    Call<MenuList> add_Rest_Menu(@Body JsonObject object);
+    @PUT("rest_user/modify/{restid}")
+    Call<RestUserResponse> update_Rest_User(@Path("restid") int restid,@Query("userid") int userid,@Body RestUserResponse obj);
 
-    @PUT("rest_Menu/modify/7")
-    Call<MenuList> update_Rest_Menu(@Query("itemid") int itemid,@Body MenuList obj);
-
-    @DELETE("rest_Menu/delete/7")
-    Call<MenuList> delete_Rest_Menu(@Query("itemid") int itemid);
+    @DELETE("rest_user/delete/{restid}")
+    Call<RestUserResponse> delete_Rest_User(@Path("restid") int restid,@Query("userid") int userid);
 
 
 
-    @GET("rest_Table/7")
-    Call<List<TableList>> get_Rest_Table();
-    @POST("rest_Table/add/7")
-    Call<TableList> add_Rest_Table(@Body JsonObject object);
 
-    @PUT("rest_Table/modify/7")
-    Call<TableList> update_Rest_Table(@Query("tableid") int tableid,@Body TableList obj);
+    @GET("rest_Menu/{restid}")
+    Call<List<MenuList>> get_Rest_Menu(@Path("restid") int restid);
+    @POST("rest_Menu/add/{restid}")
+    Call<MenuList> add_Rest_Menu(@Path("restid") int restid,@Body JsonObject object);
 
-    @DELETE("rest_Table/delete/7")
-    Call<TableList> delete_Rest_Table(@Query("tableid") int tableid);
+    @PUT("rest_Menu/modify/{restid}")
+    Call<MenuList> update_Rest_Menu(@Path("restid") int restid,@Query("itemid") int itemid,@Body MenuList obj);
+
+    @DELETE("rest_Menu/delete/{restid}")
+    Call<MenuList> delete_Rest_Menu(@Path("restid") int restid,@Query("itemid") int itemid);
+
+
+
+    @GET("rest_Table/{restid}")
+    Call<List<TableList>> get_Rest_Table(@Path("restid") int restid);
+    @POST("rest_Table/add/{restid}")
+    Call<TableList> add_Rest_Table(@Path("restid") int restid,@Body JsonObject object);
+
+    @PUT("rest_Table/modify/{restid}")
+    Call<TableList> update_Rest_Table(@Path("restid") int restid,@Query("tableid") int tableid,@Body TableList obj);
+
+    @DELETE("rest_Table/delete/{restid}")
+    Call<TableList> delete_Rest_Table(@Path("restid") int restid,@Query("tableid") int tableid);
 
 }

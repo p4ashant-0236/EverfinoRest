@@ -18,6 +18,7 @@ import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
 import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.RestUserResponse;
 import com.everfino.everfinorest.Models.TableList;
 import com.everfino.everfinorest.R;
 
@@ -30,16 +31,16 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditTableFragment extends Fragment {
+public class EditRestUserFragment extends Fragment {
 
 
-    EditText tableno,tableqr,status;
-    Button edittablebtn,cancelbtn;
+    EditText name,password,email,mobileno,role;
+    Button editrestuserbtn,cancelbtn;
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
     private static Api apiService;
-    TableList m;
-    public EditTableFragment() {
+    RestUserResponse u;
+    public EditRestUserFragment() {
         // Required empty public constructor
     }
 
@@ -48,52 +49,59 @@ public class EditTableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
 
-        m=new TableList(Integer.parseInt(getArguments().getString("tableid")),Integer.parseInt(getArguments().getString("tableno")),getArguments().getString("status"),getArguments().getString("tableqr"));
-        Log.e("###",m.tableno+m.status);
-        View view= inflater.inflate(R.layout.fragment_edit_table, container, false);
+        u=new RestUserResponse(Integer.parseInt(getArguments().getString("userid")),getArguments().getString("name"),getArguments().getString("password"),getArguments().getString("email"),getArguments().getString("mobileno"),getArguments().getString("role"));
+        Log.e("###",u.userid+u.name);
+        View view= inflater.inflate(R.layout.fragment_edit_rest_user, container, false);
         apiService= ApiClient.getClient().create(Api.class);
-        tableno=view.findViewById(R.id.etableno);
-        tableqr=view.findViewById(R.id.etableqr);
-        status=view.findViewById(R.id.estatus);
 
-        Log.e("##no",""+m.tableno);
-        tableno.setText(m.tableno+"");
-        status.setText(m.status);
-        tableqr.setText(m.tableqr);
+        name=view.findViewById(R.id.editusername);
+        password=view.findViewById(R.id.edituserpassword);
+        email=view.findViewById(R.id.edituseremail);
+        mobileno=view.findViewById(R.id.editusermobileno);
+        role=view.findViewById(R.id.edituserrole);
+
+        name.setText(u.name);
+        password.setText(u.password);
+        email.setText(u.email);
+        mobileno.setText(u.mobileno);
+        role.setText(u.role);
 
 
 
-        edittablebtn=view.findViewById(R.id.editablebtn);
-        cancelbtn=view.findViewById(R.id.ecancelbtn);
+        editrestuserbtn=view.findViewById(R.id.editrestuserbtn);
+        cancelbtn=view.findViewById(R.id.cancelbtn);
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment=new TableFragment();
+                Fragment fragment=new RestStaffManageFragment();
 
                 loadFragment(fragment);
             }
         });
 
-        edittablebtn.setOnClickListener(new View.OnClickListener() {
+        editrestuserbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m.tableqr=tableqr.getText().toString();
-                m.tableno=Integer.parseInt(tableno.getText().toString());
-                m.status=status.getText().toString();
+               u.setName(name.getText().toString());
+               u.setPassword(password.getText().toString());
+               u.setEmail(email.getText().toString());
+               u.setMobileno(mobileno.getText().toString());
+               u.setRole(role.getText().toString());
+               Log.e("#####------",u.mobileno);
                 appSharedPreferences=new AppSharedPreferences(getContext());
                 map=appSharedPreferences.getPref();
-                Call<TableList> call=apiService.update_Rest_Table(Integer.parseInt(map.get("restid")),m.tableid,m);
-                call.enqueue(new Callback<TableList>() {
+                Call<RestUserResponse> call=apiService.update_Rest_User(Integer.parseInt(map.get("restid")),u.userid,u);
+                call.enqueue(new Callback<RestUserResponse>() {
                     @Override
-                    public void onResponse(Call<TableList> call, Response<TableList> response) {
+                    public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
                         Toast.makeText(getContext(), "edited", Toast.LENGTH_SHORT).show();
-                        Fragment fragment=new TableFragment();
+                        Fragment fragment=new RestStaffManageFragment();
 
                         loadFragment(fragment);
                     }
 
                     @Override
-                    public void onFailure(Call<TableList> call, Throwable t) {
+                    public void onFailure(Call<RestUserResponse> call, Throwable t) {
                         Toast.makeText(getContext(), t.toString()+"Try Again", Toast.LENGTH_SHORT).show();
                     }
                 });

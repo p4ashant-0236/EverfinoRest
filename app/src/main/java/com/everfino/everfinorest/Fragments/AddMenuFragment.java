@@ -15,10 +15,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
+import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.MainActivity;
 import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.R;
 import com.google.gson.JsonObject;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +32,8 @@ public class AddMenuFragment extends Fragment {
 
     EditText itemname,itemprice,itemdesc,itemtype;
     Button addmenubtn,cancelbtn;
+    AppSharedPreferences appSharedPreferences;
+    HashMap<String,String> map;
     private static Api apiService;
     public AddMenuFragment() {
     }
@@ -45,6 +50,7 @@ public class AddMenuFragment extends Fragment {
         addmenubtn=view.findViewById(R.id.addnewbtn);
         cancelbtn=view.findViewById(R.id.cancelbtn);
 
+        appSharedPreferences=new AppSharedPreferences(getContext());
 
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,13 +65,14 @@ public class AddMenuFragment extends Fragment {
         addmenubtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                map=appSharedPreferences.getPref();
                 JsonObject newmenuitem=new JsonObject();
                 newmenuitem.addProperty("itemname",itemname.getText().toString());
                 newmenuitem.addProperty("itemprice",Integer.parseInt(itemprice.getText().toString()));
                 newmenuitem.addProperty("itemtype",itemtype.getText().toString());
                 newmenuitem.addProperty("itemdesc",itemdesc.getText().toString());
 
-                Call<MenuList> call=apiService.add_Rest_Menu(newmenuitem);
+                Call<MenuList> call=apiService.add_Rest_Menu(Integer.parseInt(map.get("restid")),newmenuitem);
                 call.enqueue(new Callback<MenuList>() {
                     @Override
                     public void onResponse(Call<MenuList> call, Response<MenuList> response) {

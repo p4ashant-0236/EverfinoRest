@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
+import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.Fragments.EditMenuFragment;
 import com.everfino.everfinorest.Fragments.MenuFragment;
 import com.everfino.everfinorest.Fragments.TableFragment;
@@ -39,6 +40,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.Viewholder> {
     Context context;
     List<HashMap<String,String>> ls;
     HashMap<String, String> map;
+    AppSharedPreferences appSharedPreferences;
+    HashMap<String,String> pref;
 
 
     public MenuAdapter(Context context, List<HashMap<String,String>> ls) {
@@ -51,7 +54,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.Viewholder> {
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.menulist_design, null);
-
+        appSharedPreferences=new AppSharedPreferences(context);
         return new Viewholder(view);
     }
 
@@ -100,11 +103,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.Viewholder> {
                     Toast.makeText(context, "long press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
 
                     AlertDialog.Builder al=new AlertDialog.Builder(v.getContext());
+                    pref=appSharedPreferences.getPref();
                     al.setMessage("Do you want to delete");
                     al.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Call<MenuList> call=apiService.delete_Rest_Menu(Integer.parseInt(ls.get(getAdapterPosition()).get("itemid")));
+                            Call<MenuList> call=apiService.delete_Rest_Menu(Integer.parseInt(pref.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("itemid")));
                             call.enqueue(new Callback<MenuList>() {
                                 @Override
                                 public void onResponse(Call<MenuList> call, Response<MenuList> response) {

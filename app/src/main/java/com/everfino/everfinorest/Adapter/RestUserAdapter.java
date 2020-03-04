@@ -21,10 +21,13 @@ import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
 import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.Fragments.EditMenuFragment;
+import com.everfino.everfinorest.Fragments.EditRestUserFragment;
 import com.everfino.everfinorest.Fragments.EditTableFragment;
 import com.everfino.everfinorest.Fragments.MenuFragment;
+import com.everfino.everfinorest.Fragments.RestStaffManageFragment;
 import com.everfino.everfinorest.Fragments.TableFragment;
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.RestUserResponse;
 import com.everfino.everfinorest.Models.TableList;
 import com.everfino.everfinorest.R;
 
@@ -35,13 +38,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> {
+public class RestUserAdapter extends RecyclerView.Adapter<RestUserAdapter.Viewholder> {
     Context context;
     List<HashMap<String,String>> ls;
     HashMap<String, String> map;
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> pref;
-    public TableAdapter(Context context, List<HashMap<String, String>> ls) {
+    public RestUserAdapter(Context context, List<HashMap<String, String>> ls) {
         this.context = context;
         this.ls = ls;
     }
@@ -56,11 +59,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
     }
 
 
-    public void onBindViewHolder(@NonNull TableAdapter.Viewholder holder, int position) {
+    @Override
+    public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("tableno")+map.get("status"));
-        Log.e("AD#####",map.get("tableno"));
+        holder.txtdemo.setText(map.get("userid")+map.get("name")+map.get("role"));
+        Log.e("AD#####",map.get("name"));
     }
+
 
     @Override
     public int getItemCount() {
@@ -82,12 +87,14 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
                 public void onClick(View v) {
 
 
-                    Fragment fragment=new EditTableFragment();
+                    Fragment fragment=new EditRestUserFragment();
                     Bundle b=new Bundle();
-                    b.putString("tableid",ls.get(getAdapterPosition()).get("tableid"));
-                    b.putString("tableno",ls.get(getAdapterPosition()).get("tableno"));
-                    b.putString("status",ls.get(getAdapterPosition()).get("status"));
-                    b.putString("tableqr",ls.get(getAdapterPosition()).get("tableqr"));
+                    b.putString("userid",ls.get(getAdapterPosition()).get("userid"));
+                    b.putString("name",ls.get(getAdapterPosition()).get("name"));
+                    b.putString("password",ls.get(getAdapterPosition()).get("password"));
+                    b.putString("email",ls.get(getAdapterPosition()).get("email"));
+                    b.putString("mobileno",ls.get(getAdapterPosition()).get("mobileno"));
+                    b.putString("role",ls.get(getAdapterPosition()).get("role"));
 
                     fragment.setArguments(b);
 
@@ -105,17 +112,17 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
                     al.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Call<TableList> call=apiService.delete_Rest_Table(Integer.parseInt(pref.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("tableid")));
-                            call.enqueue(new Callback<TableList>() {
+                            Call<RestUserResponse> call=apiService.delete_Rest_User(Integer.parseInt(pref.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("userid")));
+                            call.enqueue(new Callback<RestUserResponse>() {
                                 @Override
-                                public void onResponse(Call<TableList> call, Response<TableList> response) {
+                                public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
                                     Toast.makeText(itemView.getContext(), "deleted", Toast.LENGTH_SHORT).show();
-                                    Fragment fragment=new TableFragment();
+                                    Fragment fragment=new RestStaffManageFragment();
                                     loadFragment(fragment,itemView);
                                 }
 
                                 @Override
-                                public void onFailure(Call<TableList> call, Throwable t) {
+                                public void onFailure(Call<RestUserResponse> call, Throwable t) {
 
                                 }
                             });

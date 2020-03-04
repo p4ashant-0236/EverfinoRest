@@ -54,7 +54,7 @@ public class CreateManagerAccount extends AppCompatActivity {
         ob.addProperty("password",password.getText().toString());
         ob.addProperty("role","Manager");
         Log.e("$$$$4$$0",rid+"");
-        Call<RestUserResponse> call=apiService.add_Manager(rid,ob);
+        Call<RestUserResponse> call=apiService.add_Rest_User(rid,ob);
         call.enqueue(new Callback<RestUserResponse>() {
             @Override
             public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {

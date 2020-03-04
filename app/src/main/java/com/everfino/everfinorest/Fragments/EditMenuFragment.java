@@ -16,9 +16,12 @@ import android.widget.Toast;
 
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
+import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.MainActivity;
 import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.R;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +34,8 @@ public class EditMenuFragment extends Fragment {
 
     EditText itemname,itemprice,itemdesc,itemtype;
     Button editmenubtn,cancelbtn;
+    AppSharedPreferences appSharedPreferences;
+    HashMap<String,String> map;
 
     private static Api apiService;
     MenuList m;
@@ -51,10 +56,9 @@ public class EditMenuFragment extends Fragment {
         itemprice=view.findViewById(R.id.eitemprice);
         itemdesc=view.findViewById(R.id.eitemdesc);
         itemtype=view.findViewById(R.id.eitemtype);
-
+        appSharedPreferences=new AppSharedPreferences(getContext());
         itemname.setText(m.itemname);
-        itemprice.setText(m.itemprice+"" +
-                "");
+        itemprice.setText(m.itemprice+"");
         itemdesc.setText(m.itemdesc);
         itemtype.setText(m.itemtype);
 
@@ -76,8 +80,8 @@ public class EditMenuFragment extends Fragment {
                 m.itemprice=Integer.parseInt(itemprice.getText().toString());
                 m.itemdesc=itemdesc.getText().toString();
                 m.itemtype=itemtype.getText().toString();
-
-                 Call<MenuList> call=apiService.update_Rest_Menu(m.itemid,m);
+                map=appSharedPreferences.getPref();
+                 Call<MenuList> call=apiService.update_Rest_Menu(Integer.parseInt(map.get("restid")),m.itemid,m);
                  call.enqueue(new Callback<MenuList>() {
                      @Override
                      public void onResponse(Call<MenuList> call, Response<MenuList> response) {

@@ -18,6 +18,7 @@ import com.everfino.everfinorest.Adapter.MenuAdapter;
 import com.everfino.everfinorest.Adapter.TableAdapter;
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
+import com.everfino.everfinorest.AppSharedPreferences;
 import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.Models.TableList;
 import com.everfino.everfinorest.R;
@@ -39,6 +40,8 @@ public class TableFragment extends Fragment {
     RecyclerView rcv_table;
     FloatingActionButton table_add_btn;
     List<HashMap<String,String>> ls_menu=new ArrayList<>();
+    AppSharedPreferences appSharedPreferences;
+    HashMap<String,String> map;
     private static Api apiService;
     public TableFragment() {
         // Required empty public constructor
@@ -60,6 +63,7 @@ public class TableFragment extends Fragment {
                 loadFragment(fragment);
             }
         });
+        appSharedPreferences=new AppSharedPreferences(getContext());
         fetch_menu();
         return view;
     }
@@ -68,8 +72,8 @@ public class TableFragment extends Fragment {
 
         ls_menu.clear();
         rcv_table.setLayoutManager(new GridLayoutManager(getContext(),1));
-
-        Call<List<TableList>> call=apiService.get_Rest_Table();
+        map=appSharedPreferences.getPref();
+        Call<List<TableList>> call=apiService.get_Rest_Table(Integer.parseInt(map.get("restid")));
         call.enqueue(new Callback<List<TableList>>() {
             @Override
             public void onResponse(Call<List<TableList>> call, Response<List<TableList>> response) {

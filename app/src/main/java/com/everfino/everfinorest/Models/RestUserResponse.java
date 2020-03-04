@@ -8,6 +8,15 @@ public class RestUserResponse {
     public String mobileno;
     public String role;
 
+    public RestUserResponse(int userid, String name, String password, String email, String mobileno, String role) {
+        this.userid = userid;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.mobileno = mobileno;
+        this.role = role;
+    }
+
     public int getUserid() {
         return userid;
     }

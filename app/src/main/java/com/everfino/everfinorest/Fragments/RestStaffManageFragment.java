@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.Adapter.MenuAdapter;
+import com.everfino.everfinorest.Adapter.RestUserAdapter;
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
 import com.everfino.everfinorest.AppSharedPreferences;
@@ -23,6 +24,7 @@ import com.everfino.everfinorest.ChefActivity;
 import com.everfino.everfinorest.LoginActivity;
 import com.everfino.everfinorest.MainActivity;
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.RestUserResponse;
 import com.everfino.everfinorest.R;
 import com.everfino.everfinorest.ReceptionistActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,15 +41,15 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MenuFragment extends Fragment {
+public class RestStaffManageFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
-    RecyclerView rcv_menu;
-    FloatingActionButton menu_add_btn;
+    RecyclerView rcv_restuser;
+    FloatingActionButton restuser_add_btn;
     List<HashMap<String, String>> ls_menu = new ArrayList<>();
     private static Api apiService;
 
-    public MenuFragment() {
+    public RestStaffManageFragment() {
         // Required empty public constructor
     }
 
@@ -58,52 +60,60 @@ public class MenuFragment extends Fragment {
 
 
 
-        final View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        rcv_menu = view.findViewById(R.id.rcv_menu);
-        menu_add_btn = view.findViewById(R.id.menu_add_btn);
+        final View view = inflater.inflate(R.layout.fragment_rest_staff_manage, container, false);
+        rcv_restuser = view.findViewById(R.id.rcv_restuser);
+        restuser_add_btn = view.findViewById(R.id.restuser_add_btn);
         apiService = ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(getContext());
-        menu_add_btn.setOnClickListener(new View.OnClickListener() {
+        restuser_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new AddMenuFragment();
+                Fragment fragment = new AddRestUserFragment();
 
                 loadFragment(fragment);
             }
         });
 
-        fetch_menu();
+        fetch_user();
+        restuser_add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment=new AddRestUserFragment();
+                loadFragment(fragment);
+            }
+        });
         return view;
     }
 
-    private void fetch_menu() {
+    private void fetch_user() {
 
         ls_menu.clear();
-        rcv_menu.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        rcv_restuser.setLayoutManager(new GridLayoutManager(getContext(), 1));
         map=appSharedPreferences.getPref();
-        Call<List<MenuList>> call = apiService.get_Rest_Menu(Integer.parseInt(map.get("restid")));
-        call.enqueue(new Callback<List<MenuList>>() {
+        Call<List<RestUserResponse>> call = apiService.get_Rest_User(Integer.parseInt(map.get("restid")));
+        call.enqueue(new Callback<List<RestUserResponse>>() {
             @Override
-            public void onResponse(Call<List<MenuList>> call, Response<List<MenuList>> response) {
+            public void onResponse(Call<List<RestUserResponse>> call, Response<List<RestUserResponse>> response) {
                 Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
-                for (MenuList item : response.body()) {
+                for (RestUserResponse item : response.body()) {
 
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("itemid", item.getItemid() + "");
-                    map.put("itemname", item.getItemname());
-                    map.put("itemprice", item.getItemprice() + "");
-                    map.put("itemtype", item.getItemtype());
-                    map.put("itemdesc", item.getItemdesc());
-                    Log.e("####", item.getItemname());
+                    map.put("userid", item.getUserid() + "");
+                    map.put("name", item.getName());
+                    map.put("password", item.getPassword() + "");
+                    map.put("email", item.getEmail());
+                    map.put("mobileno", item.getMobileno());
+                    map.put("role", item.getRole());
+                    Log.e("####", item.getName());
                     ls_menu.add(map);
                 }
 
-                MenuAdapter adapter = new MenuAdapter(getContext(), ls_menu);
-                rcv_menu.setAdapter(adapter);
+                RestUserAdapter adapter = new RestUserAdapter(getContext(), ls_menu);
+                rcv_restuser.setAdapter(adapter);
             }
 
             @Override
-            public void onFailure(Call<List<MenuList>> call, Throwable t) {
+            public void onFailure(Call<List<RestUserResponse>> call, Throwable t) {
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
