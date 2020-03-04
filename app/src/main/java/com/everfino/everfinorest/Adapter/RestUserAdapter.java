@@ -53,7 +53,7 @@ public class RestUserAdapter extends RecyclerView.Adapter<RestUserAdapter.Viewho
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.menulist_design, null);
+        final View view = inflater.inflate(R.layout.restuserlist_design, null);
         appSharedPreferences=new AppSharedPreferences(context);
         return new Viewholder(view);
     }

@@ -2,6 +2,7 @@ package com.everfino.everfinorest.Adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
 import com.everfino.everfinorest.AppSharedPreferences;
+import com.everfino.everfinorest.ChefActivity;
 import com.everfino.everfinorest.Fragments.EditMenuFragment;
-import com.everfino.everfinorest.Fragments.EditTableFragment;
+import com.everfino.everfinorest.Fragments.LiveOrderFragment;
 import com.everfino.everfinorest.Fragments.MenuFragment;
 import com.everfino.everfinorest.Fragments.TableFragment;
+import com.everfino.everfinorest.MainActivity;
+import com.everfino.everfinorest.Models.Liveorder;
 import com.everfino.everfinorest.Models.MenuList;
-import com.everfino.everfinorest.Models.TableList;
 import com.everfino.everfinorest.R;
 
 import java.util.HashMap;
@@ -35,31 +38,34 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> {
+public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Viewholder> {
+
     Context context;
     List<HashMap<String,String>> ls;
     HashMap<String, String> map;
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> pref;
-    public TableAdapter(Context context, List<HashMap<String, String>> ls) {
-        this.context = context;
-        this.ls = ls;
+
+
+    public LiveOrderAdapter(Context context, List<HashMap<String,String>> ls) {
+        this.context=context;
+        this.ls=ls;
     }
 
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.tablelist_design, null);
+        final View view = inflater.inflate(R.layout.menulist_design, null);
         appSharedPreferences=new AppSharedPreferences(context);
         return new Viewholder(view);
     }
 
-
-    public void onBindViewHolder(@NonNull TableAdapter.Viewholder holder, int position) {
+    @Override
+    public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("tableno")+map.get("status"));
-        Log.e("AD#####",map.get("tableno"));
+        holder.txtdemo.setText(map.get("liveid")+map.get("orderid")+map.get("itemname")+map.get("status"));
+
     }
 
     @Override
@@ -70,68 +76,64 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
     public class Viewholder extends RecyclerView.ViewHolder {
 
         TextView txtdemo;
-        private Api apiService;
+        private  Api apiService;
 
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
             apiService= ApiClient.getClient().create(Api.class);
             txtdemo=itemView.findViewById(R.id.txtdemo);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-                    Fragment fragment=new EditTableFragment();
-                    Bundle b=new Bundle();
-                    b.putString("tableid",ls.get(getAdapterPosition()).get("tableid"));
-                    b.putString("tableno",ls.get(getAdapterPosition()).get("tableno"));
-                    b.putString("status",ls.get(getAdapterPosition()).get("status"));
-                    b.putString("tableqr",ls.get(getAdapterPosition()).get("tableqr"));
-
-                    fragment.setArguments(b);
-
-                    loadFragment(fragment,itemView);
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Toast.makeText(context, "long press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-
-                    AlertDialog.Builder al=new AlertDialog.Builder(v.getContext());
-                    pref=appSharedPreferences.getPref();
-                    al.setMessage("Do you want to delete");
-                    al.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    Toast.makeText(context, "press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    appSharedPreferences=new AppSharedPreferences(context);
+                    map=appSharedPreferences.getPref();
+                    AlertDialog.Builder al=new AlertDialog.Builder(context);
+                    al.setTitle("Set Stautus of Order");
+                    final String[] items={"Accepted","NotAccepted","Pendding","Done"};
+                    int chekeditem=1;
+                    al.setSingleChoiceItems(items, chekeditem, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Call<TableList> call=apiService.delete_Rest_Table(Integer.parseInt(pref.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("tableid")));
-                            call.enqueue(new Callback<TableList>() {
+                        public void onClick(final DialogInterface dialog, int which) {
+                            Call<Liveorder> call=apiService.set_Rest_liveorderstatus(Integer.parseInt(map.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("liveid")),items[which]);
+                            call.enqueue(new Callback<Liveorder>() {
                                 @Override
-                                public void onResponse(Call<TableList> call, Response<TableList> response) {
-                                    Toast.makeText(itemView.getContext(), "deleted", Toast.LENGTH_SHORT).show();
-                                    Fragment fragment=new TableFragment();
+                                public void onResponse(Call<Liveorder> call, Response<Liveorder> response) {
+                                    Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
+                                    dialog.cancel();
+                                    Fragment fragment=new LiveOrderFragment();
                                     loadFragment(fragment,itemView);
+
                                 }
 
                                 @Override
-                                public void onFailure(Call<TableList> call, Throwable t) {
+                                public void onFailure(Call<Liveorder> call, Throwable t) {
 
                                 }
                             });
-                        }
-                    });
-                    al.setNegativeButton("no", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Fragment fragment=new TableFragment();
-                            loadFragment(fragment,itemView);
-                        }
-                    });
+                            switch (which) {
+                                case 0:
+                                    Toast.makeText(context, "Accepter", Toast.LENGTH_LONG).show();
+                                    break;
+                                case 1:
+                                    Toast.makeText(context, "NotAccepted", Toast.LENGTH_LONG).show();
+                                    break;
+                                case 2:
+                                    Toast.makeText(context, "Pendding", Toast.LENGTH_LONG).show();
+                                    break;
+                                case 3:
+                                    Toast.makeText(context, "Done", Toast.LENGTH_LONG).show();
+                                    break;
+                            }
 
+                        }
+
+                    });
                     AlertDialog a=al.create();
                     a.show();
-                    return false;
+
                 }
             });
         }
@@ -145,4 +147,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
         }
 
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.everfino.everfinorest.ApiConnection;
 
+import com.everfino.everfinorest.Models.Liveorder;
 import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.Models.RegisterRestResponse;
 
@@ -30,7 +31,11 @@ public interface Api {
     @POST("rest/add")
     Call<RegisterRestResponse>  register_rest(@Body JsonObject obj);
 
+    @GET("rest_liveorder/{restid}")
+    Call<List<Liveorder>> get_Rest_Liveorder(@Path("restid") int restid);
 
+    @PUT("rest_liveorder/modify_liveorderstatus/{restid}")
+    Call<Liveorder> set_Rest_liveorderstatus(@Path("restid") int restid,@Query("liveid") int liveid,@Query("status") String status);
 
 
 

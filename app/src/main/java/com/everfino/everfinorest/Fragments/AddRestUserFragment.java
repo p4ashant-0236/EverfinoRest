@@ -49,8 +49,8 @@ public class AddRestUserFragment extends Fragment {
         email=view.findViewById(R.id.useremail);
         mobileno=view.findViewById(R.id.usermobileno);
         role=view.findViewById(R.id.userrole);
-
-
+        cancelbtn=view.findViewById(R.id.cancelbtn);
+        addrestuser=view.findViewById(R.id.restuserbtn);
         appSharedPreferences=new AppSharedPreferences(getContext());
 
         cancelbtn.setOnClickListener(new View.OnClickListener() {
