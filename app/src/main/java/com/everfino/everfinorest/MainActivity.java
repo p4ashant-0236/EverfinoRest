@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.everfino.everfinorest.Fragments.LiveOrderFragment;
 import com.everfino.everfinorest.Fragments.MenuFragment;
 import com.everfino.everfinorest.Fragments.ProfileFragment;
+import com.everfino.everfinorest.Fragments.ReceptionistFragments.ReceptionistOrderFragment;
 import com.everfino.everfinorest.Fragments.StatisticFragment;
 import com.everfino.everfinorest.Fragments.TableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -92,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new MenuFragment();
                         loadFragment(fragment);
                         break;
-                    case R.id.nav_statistic:
+                    case R.id.nav_orders:
                         //Statistic
 
-                        fragment = new StatisticFragment();
+                        fragment = new ReceptionistOrderFragment();
                         loadFragment(fragment);
                         break;
                     case R.id.nav_profile:

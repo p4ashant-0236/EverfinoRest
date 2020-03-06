@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.ReceptionistFragments.ReceptionistAddBillFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="Add New Bill"
+            android:textAlignment="center"
+            android:textSize="30dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/orderid"
+            android:hint="Orderid"
+            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/searchorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:textSize="20dp"
+                android:layout_margin="20dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_liveorderlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+               />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/paymentstatus"
+                android:hint="Payment Status"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/addbill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Bill"
+                android:textSize="20dp"
+                android:layout_margin="20dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

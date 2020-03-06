@@ -64,7 +64,7 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.View
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("liveid")+map.get("orderid")+map.get("itemname")+map.get("status"));
+        holder.txtdemo.setText(map.get("liveid")+map.get("orderid")+map.get("itemname")+map.get("status")+map.get("quntity")+map.get("itemprice"));
 
     }
 
@@ -84,58 +84,58 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.View
             apiService= ApiClient.getClient().create(Api.class);
             txtdemo=itemView.findViewById(R.id.txtdemo);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                    appSharedPreferences=new AppSharedPreferences(context);
-                    map=appSharedPreferences.getPref();
-                    AlertDialog.Builder al=new AlertDialog.Builder(context);
-                    al.setTitle("Set Stautus of Order");
-                    final String[] items={"Accepted","NotAccepted","Pendding","Done"};
-                    int chekeditem=1;
-                    al.setSingleChoiceItems(items, chekeditem, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, int which) {
-                            Call<Liveorder> call=apiService.set_Rest_liveorderstatus(Integer.parseInt(map.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("liveid")),items[which]);
-                            call.enqueue(new Callback<Liveorder>() {
-                                @Override
-                                public void onResponse(Call<Liveorder> call, Response<Liveorder> response) {
-                                    Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
-                                    dialog.cancel();
-                                    Fragment fragment=new LiveOrderFragment();
-                                    loadFragment(fragment,itemView);
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<Liveorder> call, Throwable t) {
-
-                                }
-                            });
-                            switch (which) {
-                                case 0:
-                                    Toast.makeText(context, "Accepter", Toast.LENGTH_LONG).show();
-                                    break;
-                                case 1:
-                                    Toast.makeText(context, "NotAccepted", Toast.LENGTH_LONG).show();
-                                    break;
-                                case 2:
-                                    Toast.makeText(context, "Pendding", Toast.LENGTH_LONG).show();
-                                    break;
-                                case 3:
-                                    Toast.makeText(context, "Done", Toast.LENGTH_LONG).show();
-                                    break;
-                            }
-
-                        }
-
-                    });
-                    AlertDialog a=al.create();
-                    a.show();
-
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(context, "press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
+//                    appSharedPreferences=new AppSharedPreferences(context);
+//                    map=appSharedPreferences.getPref();
+//                    AlertDialog.Builder al=new AlertDialog.Builder(context);
+//                    al.setTitle("Set Stautus of Order");
+//                    final String[] items={"Accepted","NotAccepted","Pendding","Done"};
+//                    int chekeditem=1;
+//                    al.setSingleChoiceItems(items, chekeditem, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(final DialogInterface dialog, int which) {
+//                            Call<Liveorder> call=apiService.set_Rest_liveorderstatus(Integer.parseInt(map.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("liveid")),items[which]);
+//                            call.enqueue(new Callback<Liveorder>() {
+//                                @Override
+//                                public void onResponse(Call<Liveorder> call, Response<Liveorder> response) {
+//                                    Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
+//                                    dialog.cancel();
+//                                    Fragment fragment=new LiveOrderFragment();
+//                                    loadFragment(fragment,itemView);
+//
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<Liveorder> call, Throwable t) {
+//
+//                                }
+//                            });
+//                            switch (which) {
+//                                case 0:
+//                                    Toast.makeText(context, "Accepter", Toast.LENGTH_LONG).show();
+//                                    break;
+//                                case 1:
+//                                    Toast.makeText(context, "NotAccepted", Toast.LENGTH_LONG).show();
+//                                    break;
+//                                case 2:
+//                                    Toast.makeText(context, "Pendding", Toast.LENGTH_LONG).show();
+//                                    break;
+//                                case 3:
+//                                    Toast.makeText(context, "Done", Toast.LENGTH_LONG).show();
+//                                    break;
+//                            }
+//
+//                        }
+//
+//                    });
+//                    AlertDialog a=al.create();
+//                    a.show();
+//
+//                }
+//            });
         }
 
         public void loadFragment(Fragment fragment,View v) {

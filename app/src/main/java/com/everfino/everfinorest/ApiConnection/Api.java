@@ -2,6 +2,8 @@ package com.everfino.everfinorest.ApiConnection;
 
 import com.everfino.everfinorest.Models.Liveorder;
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.Order;
+import com.everfino.everfinorest.Models.OrderItem;
 import com.everfino.everfinorest.Models.RegisterRestResponse;
 
 import com.everfino.everfinorest.Models.RestUserResponse;
@@ -34,9 +36,26 @@ public interface Api {
     @GET("rest_liveorder/{restid}")
     Call<List<Liveorder>> get_Rest_Liveorder(@Path("restid") int restid);
 
+    @GET("rest_liveorder/liveorder_order/{restid}")
+    Call<List<Liveorder>> get_Rest_Liveorder_per_order(@Path("restid") int restid,@Query("orderid") int orderid);
+
     @PUT("rest_liveorder/modify_liveorderstatus/{restid}")
     Call<Liveorder> set_Rest_liveorderstatus(@Path("restid") int restid,@Query("liveid") int liveid,@Query("status") String status);
 
+
+
+    @GET("rest_order/{restid}")
+    Call<List<Order>> get_Rest_order(@Path("restid") int restid);
+
+    @GET("rest_order/single_order/{restid}")
+    Call<Order> get_Rest_single_order(@Path("restid") int restid,@Query("orderid") int orderid);
+
+
+    @GET("rest_order/single_order/orderitems/{restid}")
+    Call<List<OrderItem>> get_Rest_single_order_orderitem(@Path("restid") int restid, @Query("orderid") int orderid);
+
+    @PUT("rest_order/modify/{restid}")
+    Call<Order> update_Rest_Order(@Path("restid") int restid,@Query("orderid") int orderid,@Body Order obj);
 
 
     @GET("rest_user/{restid}")
@@ -55,6 +74,7 @@ public interface Api {
 
 
     @GET("rest_Menu/{restid}")
+
     Call<List<MenuList>> get_Rest_Menu(@Path("restid") int restid);
     @POST("rest_Menu/add/{restid}")
     Call<MenuList> add_Rest_Menu(@Path("restid") int restid,@Body JsonObject object);

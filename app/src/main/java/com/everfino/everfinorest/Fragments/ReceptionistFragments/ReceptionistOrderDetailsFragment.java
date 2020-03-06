@@ -1,4 +1,4 @@
-package com.everfino.everfinorest.Fragments.ChefFragments;
+package com.everfino.everfinorest.Fragments.ReceptionistFragments;
 
 
 import android.content.Intent;
@@ -15,9 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.everfino.everfinorest.Adapter.ChefLiveOrderAdapter;
 import com.everfino.everfinorest.Adapter.LiveOrderAdapter;
 import com.everfino.everfinorest.Adapter.MenuAdapter;
+import com.everfino.everfinorest.Adapter.OrderItemAdapter;
 import com.everfino.everfinorest.ApiConnection.Api;
 import com.everfino.everfinorest.ApiConnection.ApiClient;
 import com.everfino.everfinorest.AppSharedPreferences;
@@ -26,6 +26,7 @@ import com.everfino.everfinorest.LoginActivity;
 import com.everfino.everfinorest.MainActivity;
 import com.everfino.everfinorest.Models.Liveorder;
 import com.everfino.everfinorest.Models.MenuList;
+import com.everfino.everfinorest.Models.OrderItem;
 import com.everfino.everfinorest.R;
 import com.everfino.everfinorest.ReceptionistActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,15 +43,15 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChefLiveOrderFragment extends Fragment {
+public class ReceptionistOrderDetailsFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
-    RecyclerView rcv_liveorder;
+    RecyclerView rcv_orderdetails;
 
-    List<HashMap<String, String>> ls_order = new ArrayList<>();
+    List<HashMap<String, String>> ls_orderitem = new ArrayList<>();
     private static Api apiService;
 
-    public ChefLiveOrderFragment() {
+    public ReceptionistOrderDetailsFragment() {
         // Required empty public constructor
     }
 
@@ -61,51 +62,45 @@ public class ChefLiveOrderFragment extends Fragment {
 
 
 
-        final View view = inflater.inflate(R.layout.fragment_live_order, container, false);
-        rcv_liveorder = view.findViewById(R.id.rcv_liveorder);
+        final View view = inflater.inflate(R.layout.fragment_receptionist_order_details, container, false);
+        rcv_orderdetails = view.findViewById(R.id.rcv_orderdetails);
 
         apiService = ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(getContext());
 
 
-        fetch_liveorder();
+        fetch_orderdetails();
         return view;
     }
 
-    private void fetch_liveorder() {
+    private void fetch_orderdetails() {
 
-        ls_order.clear();
-        rcv_liveorder.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        ls_orderitem.clear();
+        rcv_orderdetails.setLayoutManager(new GridLayoutManager(getContext(), 1));
         map=appSharedPreferences.getPref();
-        Call<List<Liveorder>> call = apiService.get_Rest_Liveorder(Integer.parseInt(map.get("restid")));
-        call.enqueue(new Callback<List<Liveorder>>() {
+        Call<List<OrderItem>> call = apiService.get_Rest_single_order_orderitem(Integer.parseInt(map.get("restid")),getArguments().getInt("orderid"));
+        call.enqueue(new Callback<List<OrderItem>>() {
             @Override
-            public void onResponse(Call<List<Liveorder>> call, Response<List<Liveorder>> response) {
+            public void onResponse(Call<List<OrderItem>> call, Response<List<OrderItem>> response) {
                 Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
-                for (Liveorder item : response.body()) {
-
+                for (OrderItem item : response.body()) {
 
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("liveid", item.getLiveid() + "");
                     map.put("orderid", item.getOrderid() + "");
-                    map.put("tableid", item.getTableid() + "");
                     map.put("itemid", item.getItemid() + "");
                     map.put("itemprice", item.getItemprice() + "");
-                    map.put("userid", item.getUserid() + "");
                     map.put("quntity", item.getQuntity() + "");
-                    map.put("itemname", item.getItemname());
-                    map.put("status", item.getStatus());
-                    map.put("order_date", item.getOrder_date().toString());
-
-                    ls_order.add(map);
+                    map.put("remark", item.getRemark() + "");
+                    map.put("itemname", item.getItemname() + "");
+                    ls_orderitem.add(map);
                 }
 
-                ChefLiveOrderAdapter adapter = new ChefLiveOrderAdapter(getContext(), ls_order);
-                rcv_liveorder.setAdapter(adapter);
+                OrderItemAdapter adapter = new OrderItemAdapter(getContext(), ls_orderitem);
+                rcv_orderdetails.setAdapter(adapter);
             }
 
             @Override
-            public void onFailure(Call<List<Liveorder>> call, Throwable t) {
+            public void onFailure(Call<List<OrderItem>> call, Throwable t) {
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
