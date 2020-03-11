@@ -19,6 +19,7 @@ public class StatisticFragment extends Fragment {
 
     public StatisticFragment() {
         // Required empty public constructor
+
     }
 
 

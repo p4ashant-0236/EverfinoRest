@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/orderid"
             android:hint="Orderid"
+            android:inputType="number"
             android:layout_marginTop="20dp"/>
             <Button
                 android:id="@+id/searchorder"

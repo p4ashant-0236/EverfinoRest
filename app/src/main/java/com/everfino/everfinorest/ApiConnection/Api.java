@@ -61,6 +61,9 @@ public interface Api {
     @GET("rest_user/{restid}")
     Call<List<RestUserResponse>> get_Rest_User(@Path("restid") int restid);
 
+    @GET("rest_user/single/{restid}")
+    Call<RestUserResponse> get_Rest_single_User(@Path("restid") int restid,@Query("userid") int userid);
+
     @POST("rest_user/add/{restid}")
     Call<RestUserResponse> add_Rest_User(@Path("restid") int restid,@Body JsonObject obj);
 

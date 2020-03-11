@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Mobile No"
                 android:id="@+id/editusermobileno"
+                android:inputType="number"
                 android:layout_marginTop="20dp"/>
             <EditText
                 android:layout_width="match_parent"
