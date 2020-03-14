@@ -94,8 +94,7 @@ public class RestStaffManageFragment extends Fragment {
         call.enqueue(new Callback<List<RestUserResponse>>() {
             @Override
             public void onResponse(Call<List<RestUserResponse>> call, Response<List<RestUserResponse>> response) {
-                Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
-                for (RestUserResponse item : response.body()) {
+                  for (RestUserResponse item : response.body()) {
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("userid", item.getUserid() + "");

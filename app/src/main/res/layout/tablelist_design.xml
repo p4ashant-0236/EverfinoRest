@@ -10,7 +10,9 @@
     <ImageView
         android:id="@+id/tableqr"
         android:layout_width="80dp"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+
+        android:layout_margin="20dp"/>
 
     <TextView
         android:layout_width="match_parent"

@@ -85,8 +85,7 @@ public class MenuFragment extends Fragment {
         call.enqueue(new Callback<List<MenuList>>() {
             @Override
             public void onResponse(Call<List<MenuList>> call, Response<List<MenuList>> response) {
-                Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
-                for (MenuList item : response.body()) {
+                 for (MenuList item : response.body()) {
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("itemid", item.getItemid() + "");

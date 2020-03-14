@@ -86,7 +86,6 @@ public class EditTableFragment extends Fragment {
                 call.enqueue(new Callback<TableList>() {
                     @Override
                     public void onResponse(Call<TableList> call, Response<TableList> response) {
-                        Toast.makeText(getContext(), "edited", Toast.LENGTH_SHORT).show();
                         Fragment fragment=new TableFragment();
 
                         loadFragment(fragment);

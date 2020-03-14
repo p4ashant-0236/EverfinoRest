@@ -81,7 +81,7 @@ public class ChefLiveOrderFragment extends Fragment {
         call.enqueue(new Callback<List<Liveorder>>() {
             @Override
             public void onResponse(Call<List<Liveorder>> call, Response<List<Liveorder>> response) {
-                Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
+
                 for (Liveorder item : response.body()) {
 
 

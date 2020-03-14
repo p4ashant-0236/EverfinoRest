@@ -2,11 +2,13 @@ package com.everfino.everfinorest.Adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,9 @@ import com.everfino.everfinorest.Fragments.TableFragment;
 import com.everfino.everfinorest.Models.MenuList;
 import com.everfino.everfinorest.Models.TableList;
 import com.everfino.everfinorest.R;
+import com.everfino.everfinorest.qrcode.QRCodeHelper;
+import com.google.gson.Gson;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +39,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.google.gson.JsonObject;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> {
     Context context;
@@ -59,6 +65,20 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
     public void onBindViewHolder(@NonNull TableAdapter.Viewholder holder, int position) {
         map=ls.get(position);
         holder.txtdemo.setText(map.get("tableno")+map.get("status"));
+
+
+
+
+        Bitmap bitmap = QRCodeHelper
+                .newInstance(context)
+                .setContent(map.get("tableqr"))
+                .setErrorCorrectionLevel(ErrorCorrectionLevel.Q)
+                .setMargin(2)
+                .getQRCOde();
+        holder.tableqr.setImageBitmap(bitmap);
+
+
+
         Log.e("AD#####",map.get("tableno"));
     }
 
@@ -70,6 +90,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
     public class Viewholder extends RecyclerView.ViewHolder {
 
         TextView txtdemo;
+        ImageView tableqr;
         private Api apiService;
 
 
@@ -77,6 +98,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
             super(itemView);
             apiService= ApiClient.getClient().create(Api.class);
             txtdemo=itemView.findViewById(R.id.txtdemo);
+            tableqr=itemView.findViewById(R.id.tableqr);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -75,8 +75,7 @@ public class ReceptionistOrderFragment extends Fragment {
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                Toast.makeText(getContext(), "" + response, Toast.LENGTH_SHORT).show();
-                for (Order item : response.body()) {
+                  for (Order item : response.body()) {
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("orderid", item.getOrderid() + "");

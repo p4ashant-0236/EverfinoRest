@@ -77,8 +77,7 @@ public class TableFragment extends Fragment {
         call.enqueue(new Callback<List<TableList>>() {
             @Override
             public void onResponse(Call<List<TableList>> call, Response<List<TableList>> response) {
-                Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
-                for(TableList item: response.body()) {
+                 for(TableList item: response.body()) {
 
                     HashMap<String,String> map=new HashMap<>();
                     map.put("tableid",item.getTableid()+"");
