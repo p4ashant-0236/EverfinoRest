@@ -149,5 +149,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.Viewholder> {
 
     }
 
-
+    public void filterList(List<HashMap<String,String>> ls)
+    {
+        this.ls=ls;
+        notifyDataSetChanged();
+    }
 }

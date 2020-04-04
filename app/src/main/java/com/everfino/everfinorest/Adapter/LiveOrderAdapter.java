@@ -147,6 +147,11 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.View
         }
 
     }
+    public void filterList(List<HashMap<String,String>> ls)
+    {
+        this.ls=ls;
+        notifyDataSetChanged();
+    }
 
 
 }

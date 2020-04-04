@@ -9,10 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.Adapter.OrderAdapter;
@@ -39,7 +42,8 @@ public class ReceptionistOrderFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
     RecyclerView rcv_order;
-
+    EditText receorder;
+    OrderAdapter adapter;
     List<HashMap<String, String>> ls_order = new ArrayList<>();
     private static Api apiService;
 
@@ -59,11 +63,41 @@ public class ReceptionistOrderFragment extends Fragment {
 
         apiService = ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(getContext());
+        receorder=view.findViewById(R.id.searchreceptipnistorder);
+        receorder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         fetch_order();
         return view;
+    }
+    private void filter(String text) {
+
+        List<HashMap<String,String>> ls=new ArrayList<>();
+
+        for (HashMap<String,String> s : ls_order) {
+            Log.e("abcccccc",s.toString());
+            if (s.toString().toLowerCase().contains(text.toLowerCase())) {
+                Log.e("true", String.valueOf(s));
+                ls.add(s);
+            }
+        }
+
+        adapter.filterList(ls);
+
     }
 
     private void fetch_order() {
@@ -89,7 +123,7 @@ public class ReceptionistOrderFragment extends Fragment {
                     ls_order.add(map);
                 }
 
-                OrderAdapter adapter = new OrderAdapter(getContext(), ls_order);
+                 adapter = new OrderAdapter(getContext(), ls_order);
                 rcv_order.setAdapter(adapter);
             }
 

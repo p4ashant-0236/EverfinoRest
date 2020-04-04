@@ -24,7 +24,7 @@ public class ApiClient {
                 .create();
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.105:3000/everfino/")
+                    .baseUrl("http://192.168.43.98:3000/everfino/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(okHttpClient)
                     .build();

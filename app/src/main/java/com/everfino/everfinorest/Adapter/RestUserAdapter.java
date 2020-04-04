@@ -151,5 +151,9 @@ public class RestUserAdapter extends RecyclerView.Adapter<RestUserAdapter.Viewho
             transaction.commit();
         }
 
+    } public void filterList(List<HashMap<String,String>> ls)
+    {
+        this.ls=ls;
+        notifyDataSetChanged();
     }
 }

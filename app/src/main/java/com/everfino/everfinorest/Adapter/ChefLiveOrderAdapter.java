@@ -148,6 +148,10 @@ public class ChefLiveOrderAdapter extends RecyclerView.Adapter<ChefLiveOrderAdap
         }
 
     }
-
+    public void filterList(List<HashMap<String,String>> ls)
+    {
+        this.ls=ls;
+        notifyDataSetChanged();
+    }
 
 }

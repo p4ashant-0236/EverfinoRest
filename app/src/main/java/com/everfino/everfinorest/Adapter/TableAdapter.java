@@ -167,4 +167,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
         }
 
     }
+    public void filterList(List<HashMap<String,String>> ls)
+    {
+        this.ls=ls;
+        notifyDataSetChanged();
+    }
 }

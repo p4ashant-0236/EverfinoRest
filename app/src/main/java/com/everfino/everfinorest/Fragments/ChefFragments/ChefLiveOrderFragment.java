@@ -9,10 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.Adapter.ChefLiveOrderAdapter;
@@ -46,7 +49,8 @@ public class ChefLiveOrderFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
     RecyclerView rcv_liveorder;
-
+    EditText chefliveorder;
+    ChefLiveOrderAdapter adapter;
     List<HashMap<String, String>> ls_order = new ArrayList<>();
     private static Api apiService;
 
@@ -66,10 +70,41 @@ public class ChefLiveOrderFragment extends Fragment {
 
         apiService = ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(getContext());
+        chefliveorder=view.findViewById(R.id.searchchefliveorder);
+        chefliveorder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         fetch_liveorder();
         return view;
+    }
+    private void filter(String text) {
+
+        List<HashMap<String,String>> ls=new ArrayList<>();
+
+        for (HashMap<String,String> s : ls_order) {
+            Log.e("abcccccc",s.toString());
+            if (s.toString().toLowerCase().contains(text.toLowerCase())) {
+                Log.e("true", String.valueOf(s));
+                ls.add(s);
+            }
+        }
+
+        adapter.filterList(ls);
+
     }
 
     private void fetch_liveorder() {
@@ -100,7 +135,7 @@ public class ChefLiveOrderFragment extends Fragment {
                     ls_order.add(map);
                 }
 
-                ChefLiveOrderAdapter adapter = new ChefLiveOrderAdapter(getContext(), ls_order);
+                 adapter = new ChefLiveOrderAdapter(getContext(), ls_order);
                 rcv_liveorder.setAdapter(adapter);
             }
 

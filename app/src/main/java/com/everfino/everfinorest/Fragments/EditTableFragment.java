@@ -77,11 +77,11 @@ public class EditTableFragment extends Fragment {
         edittablebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m.tableqr=tableqr.getText().toString();
-                m.tableno=Integer.parseInt(tableno.getText().toString());
-                m.status=status.getText().toString();
                 appSharedPreferences=new AppSharedPreferences(getContext());
                 map=appSharedPreferences.getPref();
+                m.tableqr=map.get("restid")+"_"+tableqr.getText().toString();
+                m.tableno=Integer.parseInt(tableno.getText().toString());
+                m.status=status.getText().toString();
                 Call<TableList> call=apiService.update_Rest_Table(Integer.parseInt(map.get("restid")),m.tableid,m);
                 call.enqueue(new Callback<TableList>() {
                     @Override

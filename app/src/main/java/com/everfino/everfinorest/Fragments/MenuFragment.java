@@ -9,10 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.Adapter.MenuAdapter;
@@ -44,6 +47,9 @@ public class MenuFragment extends Fragment {
     HashMap<String,String> map;
     RecyclerView rcv_menu;
     FloatingActionButton menu_add_btn;
+
+    MenuAdapter adapter;
+    EditText searchmenu;
     List<HashMap<String, String>> ls_menu = new ArrayList<>();
     private static Api apiService;
 
@@ -71,11 +77,41 @@ public class MenuFragment extends Fragment {
                 loadFragment(fragment);
             }
         });
+        searchmenu=view.findViewById(R.id.searchmenu);
+        searchmenu.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         fetch_menu();
         return view;
     }
+    private void filter(String text) {
 
+        List<HashMap<String,String>> ls=new ArrayList<>();
+
+        for (HashMap<String,String> s : ls_menu) {
+            Log.e("abcccccc",s.toString());
+            if (s.toString().toLowerCase().contains(text.toLowerCase())) {
+                Log.e("true", String.valueOf(s));
+                ls.add(s);
+            }
+        }
+
+        adapter.filterList(ls);
+
+    }
     private void fetch_menu() {
 
         ls_menu.clear();
@@ -97,7 +133,7 @@ public class MenuFragment extends Fragment {
                     ls_menu.add(map);
                 }
 
-                MenuAdapter adapter = new MenuAdapter(getContext(), ls_menu);
+                 adapter = new MenuAdapter(getContext(), ls_menu);
                 rcv_menu.setAdapter(adapter);
             }
 
