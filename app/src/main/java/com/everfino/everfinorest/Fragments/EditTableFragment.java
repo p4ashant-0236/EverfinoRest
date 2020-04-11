@@ -79,7 +79,7 @@ public class EditTableFragment extends Fragment {
             public void onClick(View v) {
                 appSharedPreferences=new AppSharedPreferences(getContext());
                 map=appSharedPreferences.getPref();
-                m.tableqr=map.get("restid")+"_"+tableqr.getText().toString();
+                m.tableqr=map.get("restid")+"_"+m.tableid+"_"+tableqr.getText().toString();
                 m.tableno=Integer.parseInt(tableno.getText().toString());
                 m.status=status.getText().toString();
                 Call<TableList> call=apiService.update_Rest_Table(Integer.parseInt(map.get("restid")),m.tableid,m);
