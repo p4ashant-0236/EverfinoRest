@@ -37,13 +37,14 @@ import retrofit2.Response;
  */
 public class ReceptionistAddBillFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
-    HashMap<String,String> map;
+    HashMap<String, String> map;
     List<HashMap<String, String>> ls_liveorder = new ArrayList<>();
-    EditText orderid,paymentstauts;
-    Button addBillbtn,searchorder;
+    EditText orderid, paymentstauts;
+    Button addBillbtn, searchorder;
     RecyclerView rcv_liveorderlist;
     Order o;
     private static Api apiService;
+
     public ReceptionistAddBillFragment() {
         // Required empty public constructor
     }
@@ -54,13 +55,13 @@ public class ReceptionistAddBillFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view=inflater.inflate(R.layout.fragment_receptionist_add_bill, container, false);
-        orderid=view.findViewById(R.id.orderid);
-        o=new Order();
-        paymentstauts=view.findViewById(R.id.paymentstatus);
-        rcv_liveorderlist=view.findViewById(R.id.rcv_liveorderlist);
-        searchorder=view.findViewById(R.id.searchorder);
-        addBillbtn=view.findViewById(R.id.addbill);
+        View view = inflater.inflate(R.layout.fragment_receptionist_add_bill, container, false);
+        orderid = view.findViewById(R.id.orderid);
+        o = new Order();
+        paymentstauts = view.findViewById(R.id.paymentstatus);
+        rcv_liveorderlist = view.findViewById(R.id.rcv_liveorderlist);
+        searchorder = view.findViewById(R.id.searchorder);
+        addBillbtn = view.findViewById(R.id.addbill);
         addBillbtn.setVisibility(View.INVISIBLE);
         apiService = ApiClient.getClient().create(Api.class);
         searchorder.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +70,7 @@ public class ReceptionistAddBillFragment extends Fragment {
                 fetch_liveorder();
             }
         });
-        appSharedPreferences=new AppSharedPreferences(getContext());
+        appSharedPreferences = new AppSharedPreferences(getContext());
         addBillbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,96 +78,100 @@ public class ReceptionistAddBillFragment extends Fragment {
                 add_Bill();
             }
         });
-        return  view;
+        return view;
     }
-    void fetch_liveorder()
-    {
+
+    void fetch_liveorder() {
         ls_liveorder.clear();
         rcv_liveorderlist.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        if(orderid.getText().length()==0)
+        {
+            orderid.setError("Orderid is Required!");
+        }
+        else {
+            map = appSharedPreferences.getPref();
+            Log.e("#######-----------", map.get("restid") + Integer.parseInt(orderid.getText().toString()));
+            Call<List<Liveorder>> call = apiService.get_Rest_Liveorder_per_order(Integer.parseInt(map.get("restid")), Integer.parseInt(orderid.getText().toString()));
+            call.enqueue(new Callback<List<Liveorder>>() {
+                @Override
+                public void onResponse(Call<List<Liveorder>> call, Response<List<Liveorder>> response) {
 
-        map=appSharedPreferences.getPref();
-        Log.e("#######-----------",map.get("restid")+Integer.parseInt(orderid.getText().toString()));
-        Call<List<Liveorder>> call = apiService.get_Rest_Liveorder_per_order(Integer.parseInt(map.get("restid")),Integer.parseInt(orderid.getText().toString()));
-        call.enqueue(new Callback<List<Liveorder>>() {
-            @Override
-            public void onResponse(Call<List<Liveorder>> call, Response<List<Liveorder>> response) {
+                    for (Liveorder item : response.body()) {
 
-                for (Liveorder item : response.body()) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("liveid", item.getLiveid() + "");
+                        map.put("orderid", item.getOrderid() + "");
+                        map.put("tableid", item.getTableid() + "");
+                        map.put("itemid", item.getItemid() + "");
+                        map.put("itemprice", item.getItemprice() + "");
+                        map.put("userid", item.getUserid() + "");
+                        map.put("quntity", item.getQuntity() + "");
+                        map.put("itemname", item.getItemname());
+                        map.put("status", item.getStatus());
+                        map.put("order_date", item.getOrder_date().toString());
+                        ls_liveorder.add(map);
+                    }
 
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("liveid", item.getLiveid() + "");
-                    map.put("orderid", item.getOrderid() + "");
-                    map.put("tableid", item.getTableid() + "");
-                    map.put("itemid", item.getItemid() + "");
-                    map.put("itemprice", item.getItemprice() + "");
-                    map.put("userid", item.getUserid() + "");
-                    map.put("quntity", item.getQuntity() + "");
-                    map.put("itemname", item.getItemname());
-                    map.put("status", item.getStatus());
-                    map.put("order_date", item.getOrder_date().toString());
-                    ls_liveorder.add(map);
+                    LiveOrderAdapter adapter = new LiveOrderAdapter(getContext(), ls_liveorder);
+                    rcv_liveorderlist.setAdapter(adapter);
+                    if (ls_liveorder.size() > 0) {
+                        addBillbtn.setVisibility(View.VISIBLE);
+                        paymentstauts.setVisibility(View.VISIBLE);
+                    }
                 }
 
-                LiveOrderAdapter adapter = new LiveOrderAdapter(getContext(), ls_liveorder);
-                rcv_liveorderlist.setAdapter(adapter);
-                if(ls_liveorder.size()>0)
-                {
-                addBillbtn.setVisibility(View.VISIBLE);
-                paymentstauts.setVisibility(View.VISIBLE);
+                @Override
+                public void onFailure(Call<List<Liveorder>> call, Throwable t) {
+                    Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<Liveorder>> call, Throwable t) {
-                Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+            });
+        }
     }
 
-    void add_Bill()
-    {
-        map=appSharedPreferences.getPref();
-        Call<Order> call=apiService.get_Rest_single_order(Integer.parseInt(map.get("restid")),Integer.parseInt(orderid.getText().toString()));
+    void add_Bill() {
+        map = appSharedPreferences.getPref();
+        Call<Order> call = apiService.get_Rest_single_order(Integer.parseInt(map.get("restid")), Integer.parseInt(orderid.getText().toString()));
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                    o=response.body();
-                    int a=0;
-                    for(HashMap<String, String> item: ls_liveorder)
-                    {
-                        int am=Integer.parseInt(item.get("itemprice"))*Integer.parseInt(item.get("quntity"));
-                        a=a+am;
+                o = response.body();
+                int a = 0;
+                for (HashMap<String, String> item : ls_liveorder) {
+                    if (item.get("status").equals("Done")) {
+                        int am = Integer.parseInt(item.get("itemprice")) * Integer.parseInt(item.get("quntity"));
+                        a = a + am;
                     }
-                    Log.e("##--",a+""+paymentstauts.getText().toString());
-                    o.setAmount(a);
-                    o.setPaymentstatus(paymentstauts.getText().toString());
-                Toast.makeText(getContext(),"Total="+a,Toast.LENGTH_LONG);
-                    Call<Order> call1=apiService.update_Rest_Order(Integer.parseInt(map.get("restid")),o.orderid,o);
-                    call1.enqueue(new Callback<Order>() {
-                        @Override
-                        public void onResponse(Call<Order> call, Response<Order> response) {
-                            Log.e("##--","done");
-                            Fragment fragment=new ReceptionistOrderFragment();
-                            loadFragment(fragment);
+                }
+                Log.e("##--", a + "" + paymentstauts.getText().toString());
+                o.setAmount(a);
+                o.setPaymentstatus(paymentstauts.getText().toString());
+                Toast.makeText(getContext(), "Total=" + a, Toast.LENGTH_LONG);
+                Call<Order> call1 = apiService.update_Rest_Order(Integer.parseInt(map.get("restid")), o.orderid, o);
+                call1.enqueue(new Callback<Order>() {
+                    @Override
+                    public void onResponse(Call<Order> call, Response<Order> response) {
+                        Log.e("##--", "done");
+                        Fragment fragment = new ReceptionistOrderFragment();
+                        loadFragment(fragment);
 
-                        }
+                    }
 
-                        @Override
-                        public void onFailure(Call<Order> call, Throwable t) {
-                            Log.e("##",t.getMessage());
-                        }
-                    });
-                   
+                    @Override
+                    public void onFailure(Call<Order> call, Throwable t) {
+                        Log.e("##", t.getMessage());
+                    }
+                });
+
             }
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                Log.e("##----",t.getMessage());
-                Toast.makeText(getContext(),t.getMessage(),Toast.LENGTH_LONG);
+                Log.e("##----", t.getMessage());
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG);
             }
         });
     }
+
     public void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);

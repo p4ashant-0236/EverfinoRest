@@ -39,14 +39,16 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import com.google.gson.JsonObject;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> {
     Context context;
-    List<HashMap<String,String>> ls;
+    List<HashMap<String, String>> ls;
     HashMap<String, String> map;
     AppSharedPreferences appSharedPreferences;
-    HashMap<String,String> pref;
+    HashMap<String, String> pref;
+
     public TableAdapter(Context context, List<HashMap<String, String>> ls) {
         this.context = context;
         this.ls = ls;
@@ -57,18 +59,15 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.tablelist_design, null);
-        appSharedPreferences=new AppSharedPreferences(context);
+        appSharedPreferences = new AppSharedPreferences(context);
         return new Viewholder(view);
     }
 
 
     public void onBindViewHolder(@NonNull TableAdapter.Viewholder holder, int position) {
-        map=ls.get(position);
-        holder.txtdemo.setText(map.get("tableno")+map.get("status"));
-
-
-
-
+        map = ls.get(position);
+        holder.tableid.setText(map.get("tableid"));
+        holder.status.setText(map.get("status"));
         Bitmap bitmap = QRCodeHelper
                 .newInstance(context)
                 .setContent(map.get("tableqr"))
@@ -78,8 +77,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
         holder.tableqr.setImageBitmap(bitmap);
 
 
-
-        Log.e("AD#####",map.get("tableno"));
+        Log.e("AD#####", map.get("tableno"));
     }
 
     @Override
@@ -89,51 +87,52 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
 
     public class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView txtdemo;
+        TextView tableid, status;
         ImageView tableqr;
         private Api apiService;
 
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
-            apiService= ApiClient.getClient().create(Api.class);
-            txtdemo=itemView.findViewById(R.id.txtdemo);
-            tableqr=itemView.findViewById(R.id.tableqr);
+            apiService = ApiClient.getClient().create(Api.class);
+            tableid = itemView.findViewById(R.id.txt_tableid);
+            status = itemView.findViewById(R.id.txt_Status);
+            tableqr = itemView.findViewById(R.id.txt_tableqr);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
-                    Fragment fragment=new EditTableFragment();
-                    Bundle b=new Bundle();
-                    b.putString("tableid",ls.get(getAdapterPosition()).get("tableid"));
-                    b.putString("tableno",ls.get(getAdapterPosition()).get("tableno"));
-                    b.putString("status",ls.get(getAdapterPosition()).get("status"));
-                    b.putString("tableqr",ls.get(getAdapterPosition()).get("tableqr"));
+                    Fragment fragment = new EditTableFragment();
+                    Bundle b = new Bundle();
+                    b.putString("tableid", ls.get(getAdapterPosition()).get("tableid"));
+                    b.putString("tableno", ls.get(getAdapterPosition()).get("tableno"));
+                    b.putString("status", ls.get(getAdapterPosition()).get("status"));
+                    b.putString("tableqr", ls.get(getAdapterPosition()).get("tableqr"));
 
                     fragment.setArguments(b);
 
-                    loadFragment(fragment,itemView);
+                    loadFragment(fragment, itemView);
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Toast.makeText(context, "long press"+getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "long press" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
 
-                    AlertDialog.Builder al=new AlertDialog.Builder(v.getContext());
-                    pref=appSharedPreferences.getPref();
+                    AlertDialog.Builder al = new AlertDialog.Builder(v.getContext());
+                    pref = appSharedPreferences.getPref();
                     al.setMessage("Do you want to delete");
                     al.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Call<TableList> call=apiService.delete_Rest_Table(Integer.parseInt(pref.get("restid")),Integer.parseInt(ls.get(getAdapterPosition()).get("tableid")));
+                            Call<TableList> call = apiService.delete_Rest_Table(Integer.parseInt(pref.get("restid")), Integer.parseInt(ls.get(getAdapterPosition()).get("tableid")));
                             call.enqueue(new Callback<TableList>() {
                                 @Override
                                 public void onResponse(Call<TableList> call, Response<TableList> response) {
                                     Toast.makeText(itemView.getContext(), "deleted", Toast.LENGTH_SHORT).show();
-                                    Fragment fragment=new TableFragment();
-                                    loadFragment(fragment,itemView);
+                                    Fragment fragment = new TableFragment();
+                                    loadFragment(fragment, itemView);
                                 }
 
                                 @Override
@@ -146,30 +145,30 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Viewholder> 
                     al.setNegativeButton("no", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Fragment fragment=new TableFragment();
-                            loadFragment(fragment,itemView);
+                            Fragment fragment = new TableFragment();
+                            loadFragment(fragment, itemView);
                         }
                     });
 
-                    AlertDialog a=al.create();
+                    AlertDialog a = al.create();
                     a.show();
                     return false;
                 }
             });
         }
 
-        public void loadFragment(Fragment fragment,View v) {
-            AppCompatActivity activity=(AppCompatActivity) v.getContext();
-            FragmentTransaction transaction =activity.getSupportFragmentManager().beginTransaction();
+        public void loadFragment(Fragment fragment, View v) {
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frame_container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
         }
 
     }
-    public void filterList(List<HashMap<String,String>> ls)
-    {
-        this.ls=ls;
+
+    public void filterList(List<HashMap<String, String>> ls) {
+        this.ls = ls;
         notifyDataSetChanged();
     }
 }

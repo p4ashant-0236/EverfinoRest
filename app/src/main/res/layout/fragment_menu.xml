@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.MenuFragment">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search"
-
-        android:id="@+id/searchmenu"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_menu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-  />
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search"
+                android:textColor="@color/white"
+                android:id="@+id/searchmenu"/>
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            />
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/menu_add_btn"
@@ -30,4 +43,4 @@
         android:layout_marginRight="16dp"
         app:srcCompat="@drawable/ic_add"
         tools:ignore="VectorDrawableCompat" />
-</LinearLayout>
+</FrameLayout>

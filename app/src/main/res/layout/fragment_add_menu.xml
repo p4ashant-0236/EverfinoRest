@@ -6,84 +6,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.AddMenuFragment"
     android:orientation="vertical">
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add New Item"
-        android:textSize="30dp"
-        android:textAlignment="center"/>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="Item Name">
+        android:text=" Add Menu"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/itemname"/>
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+           <com.google.android.material.textfield.TextInputLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="20dp"
+               android:hint="Item Name">
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+               <com.google.android.material.textfield.TextInputEditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/itemname"/>
 
-        android:hint="Item price">
+           </com.google.android.material.textfield.TextInputLayout>
+           <com.google.android.material.textfield.TextInputLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="20dp"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/itemprice"
-            android:inputType="number"/>
+               android:hint="Item price">
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="Item Type">
+               <com.google.android.material.textfield.TextInputEditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/itemprice"
+                   android:inputType="number"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/itemtype"/>
+           </com.google.android.material.textfield.TextInputLayout>
+           <com.google.android.material.textfield.TextInputLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="20dp"
+               android:hint="Item Type">
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="Item Desc">
+               <com.google.android.material.textfield.TextInputEditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/itemtype"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/itemdesc"/>
+           </com.google.android.material.textfield.TextInputLayout>
+           <com.google.android.material.textfield.TextInputLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="20dp"
+               android:hint="Item Desc">
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/addnewbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add New"
-            app:icon="@drawable/ic_add"
-            android:layout_margin="20dp"
-            android:textSize="20dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            />
-        <Button
-            android:id="@+id/cancelbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:layout_margin="20dp"
-            android:textSize="20dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            />
-    </LinearLayout>
+               <com.google.android.material.textfield.TextInputEditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/itemdesc"/>
+
+           </com.google.android.material.textfield.TextInputLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+               <Button
+                   android:id="@+id/addnewbtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Add New"
+                   app:icon="@drawable/ic_add"
+                   android:layout_margin="20dp"
+                   android:textSize="20dp"
+                   style="@style/Widget.MaterialComponents.Button.Icon"
+                   />
+               <Button
+                   android:id="@+id/cancelbtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Cancel"
+                   android:layout_margin="20dp"
+                   android:textSize="20dp"
+                   style="@style/Widget.MaterialComponents.Button.Icon"
+                   />
+           </LinearLayout>
+
+       </LinearLayout>
+   </ScrollView>
 
 </LinearLayout>

@@ -134,24 +134,34 @@ public class ReceptionistProfileFragment extends Fragment {
     public  void update_data()
     {
         map=appSharedPreferences.getPref();
-        r.setMobileno(emobileno.getText().toString());
-        r.setName(ename.getText().toString());
-        r.setPassword(epassword.getText().toString());
-        r.setEmail(eemail.getText().toString());
+        if (emobileno.getText().length() == 0) {
+            emobileno.setError("Mobile No is Required!");
+        } else if (eemail.getText().length() == 0) {
+            eemail.setError("Email is Required!");
+        } else if (ename.getText().length() == 0) {
+            ename.setError("Name is Required!");
+        } else if (epassword.getText().length() == 0) {
+            epassword.setError("Password is Required!");
+        } else {
+            r.setMobileno(emobileno.getText().toString());
+            r.setName(ename.getText().toString());
+            r.setPassword(epassword.getText().toString());
+            r.setEmail(eemail.getText().toString());
 
-        Call<RestUserResponse> call=apiService.update_Rest_User(Integer.parseInt(map.get("restid")),r.userid,r);
-        call.enqueue(new Callback<RestUserResponse>() {
-            @Override
-            public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
-                ReceptionistProfileFragment profileFragment=new ReceptionistProfileFragment();
-                loadFragment(profileFragment);
-            }
+            Call<RestUserResponse> call = apiService.update_Rest_User(Integer.parseInt(map.get("restid")), r.userid, r);
+            call.enqueue(new Callback<RestUserResponse>() {
+                @Override
+                public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
+                    ReceptionistProfileFragment profileFragment = new ReceptionistProfileFragment();
+                    loadFragment(profileFragment);
+                }
 
-            @Override
-            public void onFailure(Call<RestUserResponse> call, Throwable t) {
+                @Override
+                public void onFailure(Call<RestUserResponse> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
 }

@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.everfino.everfinorest.ApiConnection.Api;
@@ -34,12 +36,14 @@ import retrofit2.Response;
 public class EditRestUserFragment extends Fragment {
 
 
-    EditText name,password,email,mobileno,role;
+    EditText name,password,email,mobileno;
+    Spinner role;
     Button editrestuserbtn,cancelbtn;
     AppSharedPreferences appSharedPreferences;
     HashMap<String,String> map;
     private static Api apiService;
     RestUserResponse u;
+    String[] restrole={"Manager","Chef","Rece"};
     public EditRestUserFragment() {
         // Required empty public constructor
     }
@@ -64,7 +68,10 @@ public class EditRestUserFragment extends Fragment {
         password.setText(u.password);
         email.setText(u.email);
         mobileno.setText(u.mobileno);
-        role.setText(u.role);
+        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item,restrole);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        role.setAdapter(aa);
 
 
 
@@ -86,7 +93,7 @@ public class EditRestUserFragment extends Fragment {
                u.setPassword(password.getText().toString());
                u.setEmail(email.getText().toString());
                u.setMobileno(mobileno.getText().toString());
-               u.setRole(role.getText().toString());
+               u.setRole(role.getSelectedItem().toString());
                Log.e("#####------",u.mobileno);
                 appSharedPreferences=new AppSharedPreferences(getContext());
                 map=appSharedPreferences.getPref();

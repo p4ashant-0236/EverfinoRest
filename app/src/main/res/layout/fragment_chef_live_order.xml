@@ -5,13 +5,18 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.MenuFragment">
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search"
+        android:background="@color/colorPrimary">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search"
+            android:textColor="@color/white"
+            android:id="@+id/searchchefliveorder"/>
 
-        android:id="@+id/searchchefliveorder"/>
-
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_liveorder"
         android:layout_width="match_parent"

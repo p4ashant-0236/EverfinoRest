@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragments.ReceptionistFragments.ReceptionistAddBillFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Add Bill"
 
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,13 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:text="Add New Bill"
-            android:textAlignment="center"
-            android:textSize="30dp"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="Search"
                 android:textSize="20dp"
-                android:layout_margin="20dp"
+                android:layout_marginTop="20dp"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 />
 
@@ -56,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Add Bill"
                 android:textSize="20dp"
-                android:layout_margin="20dp"
+                android:layout_marginTop="20dp"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 />
         </LinearLayout>

@@ -62,8 +62,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.Viewholder> 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("orderid")+map.get("name")+map.get("amount"));
-//        Log.e("AD#####",map.get("itemname"));
+        holder.orderid.setText(map.get("orderid"));
+        holder.amount.setText(map.get("amount"));
+        holder.paymentstatus.setText(map.get("paymentstatus"));
+        holder.order_date.setText(map.get("order_date"));
     }
 
     @Override
@@ -73,14 +75,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.Viewholder> 
 
     public class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView txtdemo;
+        TextView orderid,amount,paymentstatus,order_date;
         private  Api apiService;
 
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
             apiService= ApiClient.getClient().create(Api.class);
-            txtdemo=itemView.findViewById(R.id.txtdemo);
+            orderid=itemView.findViewById(R.id.txt_orderid);
+            amount=itemView.findViewById(R.id.txt_amount);
+            paymentstatus=itemView.findViewById(R.id.txt_paymentstatus);
+            order_date=itemView.findViewById(R.id.txt_order_date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

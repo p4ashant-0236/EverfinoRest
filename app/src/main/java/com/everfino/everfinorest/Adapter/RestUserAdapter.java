@@ -62,7 +62,10 @@ public class RestUserAdapter extends RecyclerView.Adapter<RestUserAdapter.Viewho
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("userid")+map.get("name")+map.get("role"));
+        holder.name.setText(map.get("name"));
+        holder.email.setText(map.get("email"));
+        holder.mobile.setText(map.get("name"));
+        holder.role.setText(map.get("role"));
         Log.e("AD#####",map.get("name"));
     }
 
@@ -74,14 +77,17 @@ public class RestUserAdapter extends RecyclerView.Adapter<RestUserAdapter.Viewho
 
     public class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView txtdemo;
+        TextView name,email,mobile,role;
         private Api apiService;
 
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
             apiService= ApiClient.getClient().create(Api.class);
-            txtdemo=itemView.findViewById(R.id.txtdemo);
+            name=itemView.findViewById(R.id.txt_name);
+            email=itemView.findViewById(R.id.txt_email);
+            mobile=itemView.findViewById(R.id.txt_mobileno);
+            role=itemView.findViewById(R.id.txt_role);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

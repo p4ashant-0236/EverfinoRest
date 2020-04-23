@@ -34,14 +34,15 @@ import retrofit2.Response;
  */
 public class ProfileFragment extends Fragment {
 
-    Button logoutbtn,managestaff,Edituserbtn,editinfobtn;
-    TextView email,name,mobile;
-    EditText ename,epassword,eemail,emobileno;
-    LinearLayout details,edit;
+    Button logoutbtn, managestaff, Edituserbtn, editinfobtn;
+    TextView email, name, mobile;
+    EditText ename, epassword, eemail, emobileno;
+    LinearLayout details, edit;
     RestUserResponse r;
     private static Api apiService;
     AppSharedPreferences appSharedPreferences;
-    HashMap<String,String> map;
+    HashMap<String, String> map;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -51,21 +52,21 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view= inflater.inflate(R.layout.fragment_profile, container, false);
-        email=view.findViewById(R.id.email);
-        name=view.findViewById(R.id.name);
-        mobile=view.findViewById(R.id.mobile);
-        editinfobtn=view.findViewById(R.id.editinfo);
-        ename=view.findViewById(R.id.ename);
-        eemail=view.findViewById(R.id.eemail);
-        epassword=view.findViewById(R.id.epassword);
-        emobileno=view.findViewById(R.id.emobileno);
-        Edituserbtn=view.findViewById(R.id.editbtn);
-        details=view.findViewById(R.id.userdatails);
-        edit=view.findViewById(R.id.edituserdetails);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        email = view.findViewById(R.id.email);
+        name = view.findViewById(R.id.name);
+        mobile = view.findViewById(R.id.mobile);
+        editinfobtn = view.findViewById(R.id.editinfo);
+        ename = view.findViewById(R.id.ename);
+        eemail = view.findViewById(R.id.eemail);
+        epassword = view.findViewById(R.id.epassword);
+        emobileno = view.findViewById(R.id.emobileno);
+        Edituserbtn = view.findViewById(R.id.editbtn);
+        details = view.findViewById(R.id.userdatails);
+        edit = view.findViewById(R.id.edituserdetails);
 
-        apiService= ApiClient.getClient().create(Api.class);
-        appSharedPreferences=new AppSharedPreferences(getContext());
+        apiService = ApiClient.getClient().create(Api.class);
+        appSharedPreferences = new AppSharedPreferences(getContext());
 
         load_data();
         edit.setVisibility(View.GONE);
@@ -80,7 +81,6 @@ public class ProfileFragment extends Fragment {
         });
 
 
-
         Edituserbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,30 +89,28 @@ public class ProfileFragment extends Fragment {
         });
 
 
-
-
-        logoutbtn=view.findViewById(R.id.logoutbtn);
-        managestaff=view.findViewById(R.id.alluser);
+        logoutbtn = view.findViewById(R.id.logoutbtn);
+        managestaff = view.findViewById(R.id.alluser);
         managestaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Fragment fragment=new RestStaffManageFragment();
-                    loadFragment(fragment);
+                Fragment fragment = new RestStaffManageFragment();
+                loadFragment(fragment);
             }
         });
         logoutbtn.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
-                                             AppSharedPreferences appSharedPreferences=new AppSharedPreferences(getContext());
+                                             AppSharedPreferences appSharedPreferences = new AppSharedPreferences(getContext());
                                              appSharedPreferences.clearPref();
                                              Toast.makeText(getContext(), "Logut Successfully", Toast.LENGTH_LONG).show();
-                                             Intent i=new Intent(getContext(), LoginActivity.class);
+                                             Intent i = new Intent(getContext(), LoginActivity.class);
                                              startActivity(i);
                                              getActivity().finish();
                                          }
                                      }
         );
-        return  view;
+        return view;
     }
 
     public void loadFragment(Fragment fragment) {
@@ -122,10 +120,9 @@ public class ProfileFragment extends Fragment {
         transaction.commit();
     }
 
-    public void load_data()
-    {
-        map=appSharedPreferences.getPref();
-        Call<RestUserResponse> call=apiService.get_Rest_single_User(Integer.parseInt(map.get("restid")),Integer.parseInt(map.get("userid")));
+    public void load_data() {
+        map = appSharedPreferences.getPref();
+        Call<RestUserResponse> call = apiService.get_Rest_single_User(Integer.parseInt(map.get("restid")), Integer.parseInt(map.get("userid")));
         call.enqueue(new Callback<RestUserResponse>() {
             @Override
             public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
@@ -138,7 +135,7 @@ public class ProfileFragment extends Fragment {
                 emobileno.setText(response.body().getMobileno());
                 epassword.setText(response.body().getPassword());
 
-                r=response.body();
+                r = response.body();
             }
 
             @Override
@@ -149,28 +146,35 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    public void update_data() {
+        map = appSharedPreferences.getPref();
+        if (emobileno.getText().length() == 0) {
+            emobileno.setError("Mobile No is Required!");
+        } else if (eemail.getText().length() == 0) {
+            eemail.setError("Email is Required!");
+        } else if (ename.getText().length() == 0) {
+            ename.setError("Name is Required!");
+        } else if (epassword.getText().length() == 0) {
+            epassword.setError("Password is Required!");
+        } else {
+            r.setMobileno(emobileno.getText().toString());
+            r.setName(ename.getText().toString());
+            r.setPassword(epassword.getText().toString());
+            r.setEmail(eemail.getText().toString());
 
-    public  void update_data()
-    {
-        map=appSharedPreferences.getPref();
-        r.setMobileno(emobileno.getText().toString());
-        r.setName(ename.getText().toString());
-        r.setPassword(epassword.getText().toString());
-        r.setEmail(eemail.getText().toString());
+            Call<RestUserResponse> call = apiService.update_Rest_User(Integer.parseInt(map.get("restid")), r.userid, r);
+            call.enqueue(new Callback<RestUserResponse>() {
+                @Override
+                public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    loadFragment(profileFragment);
+                }
 
-        Call<RestUserResponse> call=apiService.update_Rest_User(Integer.parseInt(map.get("restid")),r.userid,r);
-        call.enqueue(new Callback<RestUserResponse>() {
-            @Override
-            public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
-                ProfileFragment profileFragment=new ProfileFragment();
-                loadFragment(profileFragment);
-            }
+                @Override
+                public void onFailure(Call<RestUserResponse> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<RestUserResponse> call, Throwable t) {
-
-            }
-        });
+                }
+            });
+        }
     }
-
 }

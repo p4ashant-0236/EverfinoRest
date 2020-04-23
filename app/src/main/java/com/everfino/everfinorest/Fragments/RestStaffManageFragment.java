@@ -46,7 +46,7 @@ import retrofit2.Response;
  */
 public class RestStaffManageFragment extends Fragment {
     AppSharedPreferences appSharedPreferences;
-    HashMap<String,String> map;
+    HashMap<String, String> map;
     RecyclerView rcv_restuser;
     FloatingActionButton restuser_add_btn;
     RestUserAdapter adapter;
@@ -64,12 +64,11 @@ public class RestStaffManageFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
         final View view = inflater.inflate(R.layout.fragment_rest_staff_manage, container, false);
         rcv_restuser = view.findViewById(R.id.rcv_restuser);
         restuser_add_btn = view.findViewById(R.id.restuser_add_btn);
         apiService = ApiClient.getClient().create(Api.class);
-        appSharedPreferences=new AppSharedPreferences(getContext());
+        appSharedPreferences = new AppSharedPreferences(getContext());
         restuser_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +77,7 @@ public class RestStaffManageFragment extends Fragment {
                 loadFragment(fragment);
             }
         });
-        searchstaff=view.findViewById(R.id.searchstaffmanage);
+        searchstaff = view.findViewById(R.id.searchstaffmanage);
         searchstaff.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,18 +98,19 @@ public class RestStaffManageFragment extends Fragment {
         restuser_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment=new AddRestUserFragment();
+                Fragment fragment = new AddRestUserFragment();
                 loadFragment(fragment);
             }
         });
         return view;
     }
+
     private void filter(String text) {
 
-        List<HashMap<String,String>> ls=new ArrayList<>();
+        List<HashMap<String, String>> ls = new ArrayList<>();
 
-        for (HashMap<String,String> s : ls_menu) {
-            Log.e("abcccccc",s.toString());
+        for (HashMap<String, String> s : ls_menu) {
+            Log.e("abcccccc", s.toString());
             if (s.toString().toLowerCase().contains(text.toLowerCase())) {
                 Log.e("true", String.valueOf(s));
                 ls.add(s);
@@ -120,29 +120,31 @@ public class RestStaffManageFragment extends Fragment {
         adapter.filterList(ls);
 
     }
+
     private void fetch_user() {
 
         ls_menu.clear();
         rcv_restuser.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        map=appSharedPreferences.getPref();
+        map = appSharedPreferences.getPref();
         Call<List<RestUserResponse>> call = apiService.get_Rest_User(Integer.parseInt(map.get("restid")));
         call.enqueue(new Callback<List<RestUserResponse>>() {
             @Override
             public void onResponse(Call<List<RestUserResponse>> call, Response<List<RestUserResponse>> response) {
-                  for (RestUserResponse item : response.body()) {
-
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("userid", item.getUserid() + "");
-                    map.put("name", item.getName());
-                    map.put("password", item.getPassword() + "");
-                    map.put("email", item.getEmail());
-                    map.put("mobileno", item.getMobileno());
-                    map.put("role", item.getRole());
-                    Log.e("####", item.getName());
-                    ls_menu.add(map);
+                for (RestUserResponse item : response.body()) {
+                    if (item.userid != Integer.parseInt(map.get("restid"))) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("userid", item.getUserid() + "");
+                        map.put("name", item.getName());
+                        map.put("password", item.getPassword() + "");
+                        map.put("email", item.getEmail());
+                        map.put("mobileno", item.getMobileno());
+                        map.put("role", item.getRole());
+                        Log.e("####", item.getName());
+                        ls_menu.add(map);
+                    }
                 }
 
-                 adapter = new RestUserAdapter(getContext(), ls_menu);
+                adapter = new RestUserAdapter(getContext(), ls_menu);
                 rcv_restuser.setAdapter(adapter);
             }
 

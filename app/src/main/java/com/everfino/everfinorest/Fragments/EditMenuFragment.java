@@ -32,13 +32,14 @@ import retrofit2.Response;
  */
 public class EditMenuFragment extends Fragment {
 
-    EditText itemname,itemprice,itemdesc,itemtype;
-    Button editmenubtn,cancelbtn;
+    EditText itemname, itemprice, itemdesc, itemtype;
+    Button editmenubtn, cancelbtn;
     AppSharedPreferences appSharedPreferences;
-    HashMap<String,String> map;
+    HashMap<String, String> map;
 
     private static Api apiService;
     MenuList m;
+
     public EditMenuFragment() {
         // Required empty public constructor
     }
@@ -48,26 +49,26 @@ public class EditMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
 
-        m=new MenuList(Integer.parseInt(getArguments().getString("itemid")),getArguments().getString("itemname"),Integer.parseInt(getArguments().getString("itemprice")),getArguments().getString("itemdesc"),getArguments().getString("itemtype"));
-        Log.e("###",m.itemname+m.itemdesc);
-        View view= inflater.inflate(R.layout.fragment_edit_menu, container, false);
-        apiService= ApiClient.getClient().create(Api.class);
-        itemname=view.findViewById(R.id.eitemname);
-        itemprice=view.findViewById(R.id.eitemprice);
-        itemdesc=view.findViewById(R.id.eitemdesc);
-        itemtype=view.findViewById(R.id.eitemtype);
-        appSharedPreferences=new AppSharedPreferences(getContext());
+        m = new MenuList(Integer.parseInt(getArguments().getString("itemid")), getArguments().getString("itemname"), Integer.parseInt(getArguments().getString("itemprice")), getArguments().getString("itemdesc"), getArguments().getString("itemtype"));
+        Log.e("###", m.itemname + m.itemdesc);
+        View view = inflater.inflate(R.layout.fragment_edit_menu, container, false);
+        apiService = ApiClient.getClient().create(Api.class);
+        itemname = view.findViewById(R.id.eitemname);
+        itemprice = view.findViewById(R.id.eitemprice);
+        itemdesc = view.findViewById(R.id.eitemdesc);
+        itemtype = view.findViewById(R.id.eitemtype);
+        appSharedPreferences = new AppSharedPreferences(getContext());
         itemname.setText(m.itemname);
-        itemprice.setText(m.itemprice+"");
+        itemprice.setText(m.itemprice + "");
         itemdesc.setText(m.itemdesc);
         itemtype.setText(m.itemtype);
 
-        editmenubtn=view.findViewById(R.id.editnewbtn);
-        cancelbtn=view.findViewById(R.id.ecancelbtn);
+        editmenubtn = view.findViewById(R.id.editnewbtn);
+        cancelbtn = view.findViewById(R.id.ecancelbtn);
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment=new MenuFragment();
+                Fragment fragment = new MenuFragment();
 
                 loadFragment(fragment);
             }
@@ -76,26 +77,36 @@ public class EditMenuFragment extends Fragment {
         editmenubtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m.itemname=itemname.getText().toString();
-                m.itemprice=Integer.parseInt(itemprice.getText().toString());
-                m.itemdesc=itemdesc.getText().toString();
-                m.itemtype=itemtype.getText().toString();
-                map=appSharedPreferences.getPref();
-                 Call<MenuList> call=apiService.update_Rest_Menu(Integer.parseInt(map.get("restid")),m.itemid,m);
-                 call.enqueue(new Callback<MenuList>() {
-                     @Override
-                     public void onResponse(Call<MenuList> call, Response<MenuList> response) {
-                         Toast.makeText(getContext(), "edited", Toast.LENGTH_SHORT).show();
-                         Fragment fragment=new MenuFragment();
+                if (itemname.getText().length() == 0) {
+                    itemname.setError("Item Name is Required!");
+                } else if (itemprice.getText().length() == 0) {
+                    itemname.setError("Item Price is Required!");
+                } else if (itemtype.getText().length() == 0) {
+                    itemname.setError("Item Type is Required!");
+                } else if (itemdesc.getText().length() == 0) {
+                    itemname.setError("Item Decription is Required!");
+                } else {
+                    m.itemname = itemname.getText().toString();
+                    m.itemprice = Integer.parseInt(itemprice.getText().toString());
+                    m.itemdesc = itemdesc.getText().toString();
+                    m.itemtype = itemtype.getText().toString();
+                    map = appSharedPreferences.getPref();
+                    Call<MenuList> call = apiService.update_Rest_Menu(Integer.parseInt(map.get("restid")), m.itemid, m);
+                    call.enqueue(new Callback<MenuList>() {
+                        @Override
+                        public void onResponse(Call<MenuList> call, Response<MenuList> response) {
+                            Toast.makeText(getContext(), "edited", Toast.LENGTH_SHORT).show();
+                            Fragment fragment = new MenuFragment();
 
-                        loadFragment(fragment);
-                     }
+                            loadFragment(fragment);
+                        }
 
-                     @Override
-                     public void onFailure(Call<MenuList> call, Throwable t) {
-                         Toast.makeText(getContext(), t.toString()+"Try Again", Toast.LENGTH_SHORT).show();
-                     }
-                 });
+                        @Override
+                        public void onFailure(Call<MenuList> call, Throwable t) {
+                            Toast.makeText(getContext(), t.toString() + "Try Again", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
         return view;

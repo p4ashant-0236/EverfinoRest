@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ProfileFragment"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Profile"
+
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
@@ -40,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="20dp"
                     android:textSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     />
@@ -92,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="20dp"
                     android:textSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     />
@@ -106,20 +114,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Logout"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:layout_marginTop="20dp"
-                    android:textSize="30dp"
+                    android:textSize="15dp"
+                    android:background="@color/colorPrimary"
                     android:id="@+id/logoutbtn"/>
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Manage staff"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:layout_marginTop="20dp"
-                    android:textSize="30dp"
+                    android:textSize="15dp"
+                    android:background="@color/colorPrimary"
                     android:id="@+id/alluser"/>
             </LinearLayout>
         </LinearLayout>

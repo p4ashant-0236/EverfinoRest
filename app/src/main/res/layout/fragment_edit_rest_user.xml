@@ -3,22 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragments.EditRestUserFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Edit Employee"
 
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Edit Rest User"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30dp"
-                android:textAlignment="center"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +46,7 @@
                 android:id="@+id/editusermobileno"
                 android:inputType="number"
                 android:layout_marginTop="20dp"/>
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Role"

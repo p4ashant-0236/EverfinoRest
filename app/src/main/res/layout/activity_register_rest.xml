@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".RegisterRestActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Register Restaurant"
+
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,14 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Register Reataurant"
-                android:textSize="30dp"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"/>
 
             <EditText
                 android:layout_width="match_parent"

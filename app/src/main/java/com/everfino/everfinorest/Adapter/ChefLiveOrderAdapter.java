@@ -57,7 +57,7 @@ public class ChefLiveOrderAdapter extends RecyclerView.Adapter<ChefLiveOrderAdap
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.menulist_design, null);
+        final View view = inflater.inflate(R.layout.liveorderlist_design, null);
         appSharedPreferences=new AppSharedPreferences(context);
         return new Viewholder(view);
     }
@@ -65,8 +65,12 @@ public class ChefLiveOrderAdapter extends RecyclerView.Adapter<ChefLiveOrderAdap
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("liveid")+map.get("orderid")+map.get("itemname")+map.get("status"));
-
+        holder.itemprice.setText(map.get("itemprice"));
+        holder.quantity.setText("Quantity : "+map.get("quntity"));
+        holder.itemname.setText(map.get("itemname"));
+        holder.status.setText(map.get("status"));
+        holder.order_date.setText(map.get("order_date"));
+        holder.tableid.setText(map.get("tableid"));
     }
 
     @Override
@@ -76,14 +80,19 @@ public class ChefLiveOrderAdapter extends RecyclerView.Adapter<ChefLiveOrderAdap
 
     public class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView txtdemo;
+        TextView itemname,quantity,status,itemprice,order_date,tableid;
         private  Api apiService;
 
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
             apiService= ApiClient.getClient().create(Api.class);
-            txtdemo=itemView.findViewById(R.id.txtdemo);
+            itemname=itemView.findViewById(R.id.txt_itemname);
+            quantity=itemView.findViewById(R.id.txt_quantity);
+            status=itemView.findViewById(R.id.txt_Status);
+            itemprice=itemView.findViewById(R.id.txt_itemprice);
+            order_date=itemView.findViewById(R.id.txt_Date);
+            tableid=itemView.findViewById(R.id.txt_tableid);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

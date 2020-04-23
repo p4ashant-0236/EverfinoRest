@@ -22,37 +22,36 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText restid,restname,username,password;
+    EditText restid, restname, username, password;
     Button btnlogin;
     TextView createnewrest;
     ProgressDialog progressDialog;
     private static Api apiService;
     AppSharedPreferences appSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        restid=findViewById(R.id.restid);
-        restname=findViewById(R.id.rest_name);
-        username=findViewById(R.id.username);
-        password=findViewById(R.id.password);
-        btnlogin=findViewById(R.id.btn_login);
-        createnewrest=findViewById(R.id.registerrest);
+        restid = findViewById(R.id.restid);
+        restname = findViewById(R.id.rest_name);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        btnlogin = findViewById(R.id.btn_login);
+        createnewrest = findViewById(R.id.registerrest);
 
-        apiService= ApiClient.getClient().create(Api.class);
-        appSharedPreferences=new AppSharedPreferences(this);
+        apiService = ApiClient.getClient().create(Api.class);
+        appSharedPreferences = new AppSharedPreferences(this);
 
 
         createnewrest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(LoginActivity.this,RegisterRestActivity.class);
+                Intent i = new Intent(LoginActivity.this, RegisterRestActivity.class);
                 startActivity(i);
                 finish();
             }
         });
-
-
 
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
@@ -70,38 +69,41 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void reststafflogin()
-    {
-        JsonObject inputData=new JsonObject();
-        inputData.addProperty("username",username.getText().toString());
-        inputData.addProperty("password",password.getText().toString());
-        final int rest_id=Integer.parseInt(restid.getText().toString());
-        Log.e("$$$$$$$$$$$$$$$",rest_id+username.getText().toString()+password.getText().toString());
+    public void reststafflogin() {
+        JsonObject inputData = new JsonObject();
+        if (username.getText().length() == 0) {
+            username.setError("Username is Required!");
+        } else if (password.getText().length() == 0) {
+            password.setError("Password is Required!");
+        } else {
+            inputData.addProperty("username", username.getText().toString());
+            inputData.addProperty("password", password.getText().toString());
+            final int rest_id = Integer.parseInt(restid.getText().toString());
+            Log.e("$$$$$$$$$$$$$$$", rest_id + username.getText().toString() + password.getText().toString());
 
-        Call<RestUserResponse> call=apiService.rest_staff_login(Integer.parseInt(restid.getText().toString()),inputData);
-        call.enqueue(new Callback<RestUserResponse>() {
-            @Override
-            public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
-                progressDialog.dismiss();
+            Call<RestUserResponse> call = apiService.rest_staff_login(Integer.parseInt(restid.getText().toString()), inputData);
+            call.enqueue(new Callback<RestUserResponse>() {
+                @Override
+                public void onResponse(Call<RestUserResponse> call, Response<RestUserResponse> response) {
+                    progressDialog.dismiss();
 
-                if(response.body().getName()=="false") {
-                    Log.e("$$$$$$sadffdf",response.body().getName());
-                    Toast.makeText(LoginActivity.this, "check username and password", Toast.LENGTH_LONG).show();
+                    if (response.body().getName() == "false") {
+                        Log.e("$$$$$$sadffdf", response.body().getName());
+                        Toast.makeText(LoginActivity.this, "check username and password", Toast.LENGTH_LONG).show();
+                    } else {
+                        appSharedPreferences.setPref(rest_id, restname.getText().toString(), response.body().getUserid(), response.body().getEmail(), response.body().getRole());
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
                 }
-                else
-                {
-                    appSharedPreferences.setPref(rest_id,restname.getText().toString(),response.body().getUserid(),response.body().getEmail(),response.body().getRole());
-                    Intent i=new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(i);
-                    finish();
+
+                @Override
+                public void onFailure(Call<RestUserResponse> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
                 }
-            }
+            });
 
-            @Override
-            public void onFailure(Call<RestUserResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        }
     }
 }

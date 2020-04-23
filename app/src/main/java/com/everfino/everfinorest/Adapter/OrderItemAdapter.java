@@ -53,8 +53,10 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         map=ls.get(position);
-        holder.txtdemo.setText(map.get("orderid")+map.get("itemid")+map.get("itemname")+map.get("quntity"));
-
+        holder.itemname.setText(map.get("itemname"));
+        holder.itemdesc.setText("Quantity : "+map.get("quntity"));
+        holder.itemtype.setText("Orderid : "+map.get("orderid"));
+        holder.itemprice.setText(map.get("itemprice"));
     }
 
     @Override
@@ -64,12 +66,16 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
 
     public class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView txtdemo;
+        TextView itemname, itemprice, itemtype, itemdesc;
 
         public Viewholder(@NonNull final View itemView) {
             super(itemView);
 
-            txtdemo=itemView.findViewById(R.id.txtdemo);
+            itemname = itemView.findViewById(R.id.txt_itemname);
+            itemprice = itemView.findViewById(R.id.txt_itemprice);
+
+            itemtype = itemView.findViewById(R.id.txt_itemtype);
+            itemdesc = itemView.findViewById(R.id.txt_itemdesc);
 
 
         }
