@@ -75,7 +75,12 @@ public class LoginActivity extends AppCompatActivity {
             username.setError("Username is Required!");
         } else if (password.getText().length() == 0) {
             password.setError("Password is Required!");
-        } else {
+        }else if(restid.getText().length()==0)
+        {
+            restid.setError("RestId is Required!");
+        }else if(restname.getText().length()==0)
+        {restname.setError("RestName Is Required!");}
+            else {
             inputData.addProperty("username", username.getText().toString());
             inputData.addProperty("password", password.getText().toString());
             final int rest_id = Integer.parseInt(restid.getText().toString());

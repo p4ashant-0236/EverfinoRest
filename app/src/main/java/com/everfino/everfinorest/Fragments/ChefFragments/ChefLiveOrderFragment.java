@@ -65,12 +65,13 @@ public class ChefLiveOrderFragment extends Fragment {
 
 
 
-        final View view = inflater.inflate(R.layout.fragment_live_order, container, false);
+        final View view = inflater.inflate(R.layout.fragment_chef_live_order, container, false);
         rcv_liveorder = view.findViewById(R.id.rcv_liveorder);
 
         apiService = ApiClient.getClient().create(Api.class);
         appSharedPreferences=new AppSharedPreferences(getContext());
-        chefliveorder=view.findViewById(R.id.searchchefliveorder);
+        chefliveorder=view.findViewById(R.id.searchliveorderchef);
+
         chefliveorder.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

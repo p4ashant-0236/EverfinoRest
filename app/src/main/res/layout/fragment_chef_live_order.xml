@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:hint="Search"
             android:textColor="@color/white"
-            android:id="@+id/searchchefliveorder"/>
+            android:id="@+id/searchliveorderchef"/>
 
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
